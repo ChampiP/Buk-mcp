@@ -20,19 +20,29 @@ interface Body {
   rows: unknown[] | null;
   single: unknown;
   pagination: Pagination | null;
+  /** True when a single object carries a paginated sub-list that this call does not traverse. */
+  subListPaginated: boolean;
 }
 
 const COUNT_SEMANTICS_PROVIDER = 'pagination.count del proveedor; puede ser local a la página';
 const COUNT_SEMANTICS_TRAVERSED = 'registros devueltos tras recorrer todas las páginas';
 
+// BUK answers lists as `{ data: [...] }`, as a bare array, or as `{ pagination, <collection>: [...] }`.
 function parseBody(raw: unknown): Body {
-  if (Array.isArray(raw)) return { rows: raw, single: undefined, pagination: null };
+  if (Array.isArray(raw)) return { rows: raw, single: undefined, pagination: null, subListPaginated: false };
   if (isRecord(raw) && 'data' in raw) {
     const pagination = parsePagination(raw.pagination);
-    if (Array.isArray(raw.data)) return { rows: raw.data, single: undefined, pagination };
-    return { rows: null, single: raw.data, pagination };
+    if (Array.isArray(raw.data)) return { rows: raw.data, single: undefined, pagination, subListPaginated: false };
+    return { rows: null, single: raw.data, pagination, subListPaginated: false };
   }
-  return { rows: null, single: raw, pagination: null };
+  if (isRecord(raw) && isRecord(raw.pagination)) {
+    const pagination = parsePagination(raw.pagination);
+    const collections = Object.entries(raw).filter(([key, value]) => key !== 'pagination' && Array.isArray(value));
+    const scalars = Object.keys(raw).filter((key) => key !== 'pagination' && !Array.isArray(raw[key]));
+    if (collections.length === 1 && scalars.length === 0) return { rows: collections[0]![1] as unknown[], single: undefined, pagination, subListPaginated: false };
+    return { rows: null, single: raw, pagination: null, subListPaginated: pagination?.next != null };
+  }
+  return { rows: null, single: raw, pagination: null, subListPaginated: false };
 }
 
 export function createDomainService(options: DomainServiceOptions) {
@@ -88,6 +98,10 @@ export function createDomainService(options: DomainServiceOptions) {
       }
     }
 
+    if (first.subListPaginated) {
+      complete = false;
+      warnings.push('El objeto incluye una sublista con más páginas que esta operación no recorre; el resultado es parcial.');
+    }
     const isList = first.rows !== null;
     const totalCount = complete && isList && request.allPages ? rows.length : pagination?.count ?? null;
     const semantics = complete && isList && request.allPages ? COUNT_SEMANTICS_TRAVERSED : COUNT_SEMANTICS_PROVIDER;

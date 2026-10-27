@@ -140,3 +140,25 @@ test('the MCP server exposes the three phase-one tools plus one read-only tool p
   await mcp.close();
   await server.close();
 });
+
+test('list envelopes keyed by a collection name (not `data`) are read as lists and stay paginated', async () => {
+  const pages = [
+    { pagination: { next: `${BASE}/recruiting/applicants/?page=2`, count: 2, total_pages: 2 }, applicants: [{ id: 1 }] },
+    { pagination: { next: null, count: 2, total_pages: 2 }, applicants: [{ id: 2 }] },
+  ];
+  const single = await domainHarness([pages[0]]).service.query('buk_recruiting', { request: { operation: 'recruiting_applicants' } });
+  assert.deepEqual(single.data, [{ id: 1 }]);
+  assert.equal(single.meta.complete, false);
+  const { service, urls } = domainHarness(pages);
+  const all = await service.query('buk_recruiting', { request: { operation: 'recruiting_applicants', all_pages: true } });
+  assert.deepEqual(all.data, [{ id: 1 }, { id: 2 }]);
+  assert.equal(all.meta.complete, true);
+  assert.equal(urls.length, 2);
+});
+
+test('a single object that carries a paginated sub-list with more pages is never reported complete', async () => {
+  const { service } = domainHarness([{ id: 3, name: 'G', pagination: { next: `${BASE}/groups/3?page=2`, count: 80 }, participants: [{ id: 1 }] }]);
+  const out = await service.query('buk_organization', { request: { operation: 'groups_by_id', id: '3' } });
+  assert.equal(out.meta.complete, false);
+  assert.match(out.warnings.join(' '), /sub-?lista|más páginas/i);
+});
