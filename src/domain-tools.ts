@@ -2,7 +2,7 @@ import * as z from 'zod/v4';
 import { DOMAINS } from './domains.generated.js';
 import { OPERATIONS, type OperationSpec, type ParameterSpec } from './operations.generated.js';
 import { metaSchema } from './schemas.js';
-import type { Query } from './routes.js';
+import { requiredQueryNames, type Query } from './routes.js';
 
 // Schemas stay light because every tool repeats them in the tool list; the HTTP client enforces the strict bounds again.
 const NUMERIC_ID = /^\d{1,19}$/;
@@ -55,7 +55,7 @@ function describe<T extends z.ZodType>(schema: T, parameter: ParameterSpec): T {
   return (text ? schema.describe(text) : schema) as T;
 }
 
-function parameterSchema(parameter: ParameterSpec): z.ZodType {
+function parameterSchema(parameter: ParameterSpec, required: boolean): z.ZodType {
   if (parameter.in === 'path') {
     return describe(parameter.type === 'integer' ? z.string().regex(NUMERIC_ID) : z.string().regex(SAFE_SEGMENT), parameter);
   }
@@ -67,7 +67,7 @@ function parameterSchema(parameter: ParameterSpec): z.ZodType {
   } else if (parameter.enum) {
     schema = parameter.enum.every((value) => typeof value === 'string') ? z.enum(parameter.enum as [string, ...string[]]) : z.union(parameter.enum.map((value) => z.literal(value)));
   } else schema = parameter.format === 'date' ? z.string().regex(/^\d{4}-\d{2}-\d{2}$/) : z.string();
-  return describe(parameter.required ? schema : schema.optional(), parameter);
+  return describe(required ? schema : schema.optional(), parameter);
 }
 
 /** The Swagger under-documents paging (e.g. /users), so collection endpoints without path parameters offer all_pages too; runtime detects pagination.next. */
@@ -79,11 +79,12 @@ function variantShape(operation: OperationSpec): Record<string, z.ZodType> {
   const shape: Record<string, z.ZodType> = {};
   const summary = `${operation.deprecated ? '[OBSOLETO] ' : ''}${operation.summary}`.trim();
   shape.operation = summary ? z.literal(operationName(operation.path)).describe(summary) : z.literal(operationName(operation.path));
+  const requiredNames = requiredQueryNames(operation);
   for (const parameter of operation.parameters) {
     if (!encodable(parameter)) continue;
     const key = publicName(parameter);
     if (Object.hasOwn(shape, key)) throw new Error(`Parameter name collision in ${operation.path}: ${key}`);
-    shape[key] = parameterSchema(parameter);
+    shape[key] = parameterSchema(parameter, parameter.in === 'path' || requiredNames.has(parameter.name));
   }
   if (offersAllPages(operation)) shape.all_pages = z.boolean().optional().describe('true: todas las páginas');
   return shape;

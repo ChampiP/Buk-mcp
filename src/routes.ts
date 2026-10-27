@@ -24,6 +24,34 @@ const PHASE_ONE: Record<string, { integerPath?: boolean; required?: string[]; en
   '/employees/{id}/jobs': { integerPath: true },
 };
 
+// Observed against the live API: BUK answers 400 without these parameters although the Swagger does not mark them required.
+const OBSERVED_REQUIRED: Record<string, string[]> = {
+  '/accounting': ['month', 'year'],
+  '/accounting_structure/assignments': ['empresa_id'],
+};
+
+// Measured against the live API: /accounting answers in 26 to 39 s. Other operations keep the global attempt timeout.
+const SLOW_ATTEMPT_MS = 55_000;
+const SLOW_OPERATIONS = new Set(['/accounting']);
+
+export interface RoutePolicy {
+  timeoutMs?: number;
+  maxRetries?: number;
+}
+
+export function routePolicy(route: Route): RoutePolicy {
+  return SLOW_OPERATIONS.has(route.operation.path) ? { timeoutMs: SLOW_ATTEMPT_MS, maxRetries: 0 } : {};
+}
+
+/** Required query parameter names: Swagger `required` plus parameters BUK was observed to demand. */
+export function requiredQueryNames(operation: OperationSpec): Set<string> {
+  return new Set([
+    ...operation.parameters.filter((p) => p.in === 'query' && p.required).map((p) => p.name),
+    ...(OBSERVED_REQUIRED[operation.path] ?? []),
+    ...(PHASE_ONE[operation.path]?.required ?? []),
+  ]);
+}
+
 function deny(message: string, code: string): never {
   throw new BukServiceError(message, code);
 }
@@ -82,8 +110,7 @@ export function validateQuery(route: Route, query: Query, continuation = false):
     const spec = specs.get(key) ?? (continuation && continuationKeys.has(key) ? { name: key, in: 'query' as const, required: false, type: 'integer' as const } : undefined);
     if (!spec || !valueAllowed(spec, key, value, override?.enums?.[key])) deny('BUK query is not allowed', 'BUK_QUERY_DENIED');
   }
-  const required = new Set([...(override?.required ?? []), ...[...specs.values()].filter((p) => p.required).map((p) => p.name)]);
-  for (const key of required) if (query[key] === undefined) deny('BUK request is missing a required query parameter', 'BUK_QUERY_DENIED');
+  for (const key of requiredQueryNames(route.operation)) if (query[key] === undefined) deny('BUK request is missing a required query parameter', 'BUK_QUERY_DENIED');
 }
 
 export function appendQuery(url: URL, query: Query): void {

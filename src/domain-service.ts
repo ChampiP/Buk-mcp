@@ -45,6 +45,20 @@ function parseBody(raw: unknown): Body {
   return { rows: null, single: raw, pagination: null, subListPaginated: false };
 }
 
+const HINTS: Record<string, string> = {
+  BUK_HTTP_400: 'BUK rechazó los parámetros (400). Revisa los parámetros obligatorios y sus formatos para esta operación.',
+  BUK_HTTP_401: 'BUK rechazó el token (401). Revisa que BUK_AUTH_TOKEN sea válido.',
+  BUK_HTTP_403: 'BUK negó el acceso (403): el token no tiene permiso de lectura para este módulo.',
+  BUK_HTTP_404: 'BUK devolvió 404: el recurso no existe o no hay datos para esos parámetros. Se informa como error, no como lista vacía.',
+  BUK_REDIRECT_DENIED: 'Esta operación responde con una redirección (por ejemplo, descarga de un archivo). El servidor no sigue redirecciones por seguridad y no puede entregar el archivo.',
+  BUK_TIMEOUT: 'BUK no respondió a tiempo. La operación puede ser lenta: usa filtros más estrechos (periodo, empresa o identificador).',
+};
+
+function explain(error: unknown): never {
+  if (error instanceof BukServiceError && HINTS[error.code]) throw new BukServiceError(HINTS[error.code]!, error.code);
+  throw error;
+}
+
 export function createDomainService(options: DomainServiceOptions) {
   const maxCalls = options.maxCalls ?? 50;
   const maxRecords = options.maxRecords ?? 5000;
@@ -69,7 +83,7 @@ export function createDomainService(options: DomainServiceOptions) {
     if (request.operation.deprecated) warnings.push('Operación obsoleta en BUK; puede dejar de responder.');
     if (!request.operation.hasResponseSchema) warnings.push('BUK no publica esquema de respuesta para esta operación; la forma de los datos no está garantizada.');
 
-    const first = parseBody(await options.client.get(request.path, request.query as Query, budget.requestOptions()));
+    const first = parseBody(await options.client.get(request.path, request.query as Query, budget.requestOptions()).catch(explain));
     const rows: unknown[] = first.rows ? [...first.rows] : [];
     let pagination = first.pagination;
     let calls = budget.calls;
@@ -88,7 +102,7 @@ export function createDomainService(options: DomainServiceOptions) {
           if (links.has(next)) { complete = false; warnings.push('BUK repitió un enlace de paginación; se detuvo el recorrido.'); break; }
           links.add(next);
           if (!budget.canContinue() || rows.length >= maxRecords) { complete = false; warnings.push('Se alcanzó el presupuesto de llamadas, tiempo o registros antes de terminar; el resultado es parcial.'); break; }
-          const page = parseBody(await options.client.getNextPage(next, request.path, request.query as Query, budget.requestOptions()));
+          const page = parseBody(await options.client.getNextPage(next, request.path, request.query as Query, budget.requestOptions()).catch(explain));
           if (!page.rows) throw new BukServiceError('BUK response has an unsupported or malformed envelope', 'BUK_RESPONSE_ENVELOPE');
           rows.push(...page.rows);
           pagination = page.pagination;

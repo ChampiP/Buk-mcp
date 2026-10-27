@@ -1,6 +1,6 @@
 import { API_BASE_URL } from './config.js';
 import { BukServiceError } from './errors.js';
-import { appendQuery, matchRoute, parseQuery, sameValue, validateQuery, type Query } from './routes.js';
+import { appendQuery, matchRoute, parseQuery, routePolicy, sameValue, validateQuery, type Query, type RoutePolicy } from './routes.js';
 
 export type { Query, QueryValue } from './routes.js';
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -155,10 +155,11 @@ export class BukHttpClient {
   }
 
   async get(path: string, query: Query = {}, budget: RequestBudget = {}): Promise<unknown> {
-    validateQuery(matchRoute(path), query);
+    const route = matchRoute(path);
+    validateQuery(route, query);
     const url = new URL(`${API_BASE_URL}${path}`);
     appendQuery(url, query);
-    return this.request(url, budget);
+    return this.request(url, budget, routePolicy(route));
   }
 
   validateNextPage(next: string, path: string, originalQuery: Query): void {
@@ -167,16 +168,18 @@ export class BukHttpClient {
 
   async getNextPage(next: string, path: string, originalQuery: Query, budget: RequestBudget = {}): Promise<unknown> {
     const url = validateNextUrl(next, path, originalQuery);
-    return this.request(url, budget);
+    return this.request(url, budget, routePolicy(matchRoute(path)));
   }
 
-  private async request(url: URL, budget: RequestBudget): Promise<unknown> {
-    for (let attempt = 0; attempt <= this.maxRetries; attempt += 1) {
+  private async request(url: URL, budget: RequestBudget, policy: RoutePolicy = {}): Promise<unknown> {
+    const attemptTimeoutMs = policy.timeoutMs ?? this.timeoutMs;
+    const maxRetries = policy.maxRetries ?? this.maxRetries;
+    for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
       if (budget.signal?.aborted) fail('BUK request cancelled', 'BUK_CANCELLED');
       budget.beforeAttempt?.();
       const remaining = budget.remainingMs?.();
       if (remaining !== undefined && remaining <= 0) fail('BUK tool time limit reached', 'BUK_BUDGET_EXCEEDED');
-      const timeout = Math.max(1, Math.min(this.timeoutMs, remaining ?? this.timeoutMs));
+      const timeout = Math.max(1, Math.min(attemptTimeoutMs, remaining ?? attemptTimeoutMs));
       const controller = new AbortController();
       let timedOut = false;
       const onAbort = () => controller.abort();
@@ -197,7 +200,7 @@ export class BukHttpClient {
       } catch {
         cleanup();
         if (budget.signal?.aborted) fail('BUK request cancelled', 'BUK_CANCELLED');
-        if (attempt < this.maxRetries) {
+        if (attempt < maxRetries) {
           const delay = Math.min(retryDelay(undefined, attempt), budget.remainingMs?.() ?? 1000);
           await wait(delay, budget.signal);
           continue;
@@ -222,7 +225,7 @@ export class BukHttpClient {
           const delay = retryDelay(response, attempt);
           await response.body?.cancel().catch(() => undefined);
           cleanup();
-          if (attempt < this.maxRetries) {
+          if (attempt < maxRetries) {
             await wait(Math.min(delay, budget.remainingMs?.() ?? 1000), budget.signal);
             continue;
           }
@@ -242,7 +245,7 @@ export class BukHttpClient {
         } catch (error) {
           if (budget.signal?.aborted) fail('BUK request cancelled', 'BUK_CANCELLED');
           if (timedOut) {
-            if (attempt < this.maxRetries) {
+            if (attempt < maxRetries) {
               cleanup();
               await wait(Math.min(retryDelay(undefined, attempt), budget.remainingMs?.() ?? 1000), budget.signal);
               continue;
@@ -250,7 +253,7 @@ export class BukHttpClient {
             fail('BUK request timed out', 'BUK_TIMEOUT');
           }
           if (error instanceof BukServiceError && error.code === 'BUK_NETWORK_ERROR') {
-            if (attempt < this.maxRetries) {
+            if (attempt < maxRetries) {
               cleanup();
               await wait(Math.min(retryDelay(undefined, attempt), budget.remainingMs?.() ?? 1000), budget.signal);
               continue;

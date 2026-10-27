@@ -115,8 +115,8 @@ This writes `spec/domains.json` and `src/domains.generated.ts`.
 
 ## Known limits
 
-- In the tested tenant, `/accounting` answers in about 26 to 39 seconds with roughly 110 KB and ignores `page_size`, so it exceeds the 15-second attempt limit and fails with a timeout. A per-operation timeout is a pending decision.
-- HTTP 404 responses are errors, not empty results. Observed examples: `/accounting/export*` returned 404 for period 9/2026; `/training/sence_percents/{employee_id}` returned 404 when that employee had no record.
+- In the tested tenant, `/accounting` answers in about 26 to 39 seconds with roughly 110 KB and ignores `page_size`. It is the only operation with a longer attempt timeout (55 seconds, no retries); the 100,000-byte output cap truncates its result and marks it incomplete. Other accounting exports were not measured and keep the 15-second timeout. BUK requires `month` and `year` for `/accounting` and `empresa_id` for `/accounting_structure/assignments` although its Swagger does not mark them required; the schemas require them.
+- HTTP 404 responses are errors, not empty results; domain tools explain 400, 401, 403, 404, timeouts and refused redirects in the error text. Observed examples: `/accounting/export*` returned 404 for period 9/2026; `/training/sence_percents/{employee_id}` returned 404 when that employee had no record.
 - The tested tenant had no sample data for evaluations, applicants, credits, unions, benefits, or company-variable registries. Their by-ID operations are covered by unit tests only, not validated against real records.
 - Listing all 22 tools costs about 23,000 tokens in the measured tool list.
 
