@@ -5,6 +5,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import { BukHttpClient } from './client.js';
 import { loadRuntimeConfig, type BukConfig } from './config.js';
 import { safeErrorMessage } from './errors.js';
+import { createDomainService } from './domain-service.js';
 import { createBukMcpServer } from './server.js';
 import { createBukService } from './service.js';
 
@@ -32,7 +33,14 @@ export async function main(): Promise<void> {
     toolTimeoutMs: config.toolTimeoutMs,
     maxToolOutputBytes: config.maxToolOutputBytes,
   });
-  const server = createBukMcpServer(service);
+  const domainService = createDomainService({
+    client,
+    maxCalls: config.maxCalls,
+    maxRecords: config.maxRecords,
+    toolTimeoutMs: config.toolTimeoutMs,
+    maxToolOutputBytes: config.maxToolOutputBytes,
+  });
+  const server = createBukMcpServer(service, domainService);
   try {
     await server.connect(new StdioServerTransport());
   } catch {

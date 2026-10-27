@@ -1130,7 +1130,7 @@
      "in": "query",
      "required": false,
      "type": "string",
-     "description": {}
+     "description": ""
     },
     {
      "name": "subprocess_id",
@@ -3625,7 +3625,7 @@
      "in": "query",
      "required": false,
      "type": "integer",
-     "description": {}
+     "description": ""
     },
     {
      "name": "area_id",
@@ -4190,7 +4190,7 @@
      "in": "query",
      "required": false,
      "type": "integer",
-     "description": {}
+     "description": ""
     },
     {
      "name": "page_size",
@@ -4291,7 +4291,7 @@
      "in": "query",
      "required": false,
      "type": "integer",
-     "description": {}
+     "description": ""
     },
     {
      "name": "area_id",

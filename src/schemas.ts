@@ -32,7 +32,7 @@ export const employeeContextInputSchema = z.object({
   include_salary: z.boolean().default(true),
 }).strict();
 
-const metaSchema = z.object({
+export const metaSchema = z.object({
   source: z.literal('BUK'),
   fetched_at: z.string().datetime(),
   complete: z.boolean(),

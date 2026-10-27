@@ -1,5 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import type { BukService } from './service.js';
+import type { DomainService } from './domain-service.js';
+import { domainDescription } from './domain-descriptions.js';
+import { buildDomainInputSchema, domainOutputSchema, domainToolNames } from './domain-tools.js';
 import { safeErrorMessage } from './errors.js';
 import {
   employeeContextInputSchema,
@@ -26,7 +29,7 @@ function errorResult(error: unknown) {
   };
 }
 
-export function createBukMcpServer(service: BukService): McpServer {
+export function createBukMcpServer(service: BukService, domainService?: DomainService): McpServer {
   const server = new McpServer({ name: 'depiloto-buk', version: '1.0.0' });
 
   server.registerTool('buk_workforce_summary', {
@@ -70,6 +73,24 @@ export function createBukMcpServer(service: BukService): McpServer {
       return errorResult(error);
     }
   });
+
+  if (domainService) {
+    for (const tool of domainToolNames()) {
+      server.registerTool(tool, {
+        title: tool.replace(/^buk_/, '').replaceAll('_', ' '),
+        description: domainDescription(tool),
+        inputSchema: buildDomainInputSchema(tool),
+        outputSchema: domainOutputSchema,
+        annotations,
+      }, async (args, context) => {
+        try {
+          return successResult(await domainService.query(tool, args, { signal: context.mcpReq.signal }));
+        } catch (error) {
+          return errorResult(error);
+        }
+      });
+    }
+  }
 
   return server;
 }

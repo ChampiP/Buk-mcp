@@ -122,7 +122,7 @@
    ]
   },
   "buk_employee_sections": {
-   "sensitive": false,
+   "sensitive": true,
    "phase_one": false,
    "operations": [
     "/employees/{employee_id}/family_responsibilities/{id}",
