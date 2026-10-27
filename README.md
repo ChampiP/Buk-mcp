@@ -66,14 +66,14 @@ Default per-tool limits are 50 upstream calls, 5,000 records, 60 seconds, and 10
 
 - Requests use `GET` only, against registered routes on `https://medsculp.buk.pe/api/v1/peru`; query parameters are validated against each route and no request body is sent.
 - Redirects are refused. Pagination links are checked against the approved origin, route, and original filters before another request is made.
-- `BUK_AUTH_TOKEN` is supplied by the MCP host, sent in the `auth_token` header, and is not a tool argument or included in logs or errors. As defense in depth, the client also redacts its own token from every tool result in case an upstream body echoes it.
+- `BUK_AUTH_TOKEN` is supplied by the MCP host (or the launch directory's `.env`), sent in the `auth_token` header, and is not a tool argument or included in logs or errors. As defense in depth, the client also redacts its own token from every tool result in case an upstream body echoes it.
 - Pagination links are parsed into a null-prototype record, so keys such as `__proto__` are validated like any other and rejected.
 - The client accepts JSON responses only. File-download endpoints that redirect therefore return an error.
 - The MCP transport uses stdout; startup diagnostics are written to stderr.
 
 ## Configuration
 
-Only process environment variables are read; the server does not load `.env` files. Set `BUK_AUTH_TOKEN` in the MCP host environment.
+Configuration comes from process environment variables, plus a `.env` file in the launch directory if one exists (variables already set in the environment win). Set `BUK_AUTH_TOKEN` in the MCP host environment or in that `.env`.
 
 | Variable | Default | Accepted value |
 |---|---|---|
@@ -126,30 +126,48 @@ Node.js >= 22. The test suite has passed on Node 22.23, 24.22, and 26.7.
 
 ## Install
 
-Run it straight from GitHub; `npm` clones the repository, installs dependencies and compiles it (`prepare` script) on first use:
+Internal use. The package is a precompiled tarball attached to a GitHub Release, so installing needs no clone, no compiler and no build step. The same command installs the first time and updates later (it always fetches the latest release):
 
 ```sh
-claude mcp add buk --env BUK_AUTH_TOKEN=your_token -- npx -y github:ChampiP/Buk-mcp
+pnpm add -g https://github.com/ChampiP/Buk-mcp/releases/latest/download/buk-mcp-server.tgz
+# or: npm install -g https://github.com/ChampiP/Buk-mcp/releases/latest/download/buk-mcp-server.tgz
 ```
 
-Any MCP host works with the same stdio entry: `command: npx`, `args: ["-y", "github:ChampiP/Buk-mcp"]`, `env: { BUK_AUTH_TOKEN: ... }`. The token belongs in the host's environment, never in the repository.
+Works the same in Windows PowerShell and in macOS/Linux shells. Requires Node.js >= 22. This exposes the command `buk-mcp-server`. Installing needs no token. To pin a version, replace `latest/download` with `download/v1.0.0`.
 
-Measured start-up: about 34 seconds on a cold cache (first run) and about 10 seconds afterwards, which can exceed a host's start-up timeout on the first run. Either run the command once by hand to warm the cache, raise the host's MCP start-up timeout, or install once and call the binary directly:
+### Configure the token per project
+
+In the repository where you want to use the server, create two files in the root.
+
+`.mcp.json` (safe to commit, it contains no secret):
+
+```json
+{
+  "mcpServers": {
+    "buk": { "command": "buk-mcp-server" }
+  }
+}
+```
+
+`.env` (never commit it; add it to `.gitignore`):
 
 ```sh
-npm install -g github:ChampiP/Buk-mcp   # then use the command: buk-mcp-server
+BUK_AUTH_TOKEN=your_token
 ```
 
-Pin a commit or tag (`github:ChampiP/Buk-mcp#<ref>`) so the server does not change under you.
+The server reads `.env` from the directory it is launched in, which is the project root for Claude Code. A `BUK_AUTH_TOKEN` already set in the environment takes precedence over the file. If the host starts the server from another directory, put the token in the host's `env` for that server instead.
 
-To run a local checkout instead:
+### Publish a new version (maintainers)
 
 ```sh
-npm ci && npm test && npm run build
-claude mcp add buk --env BUK_AUTH_TOKEN=your_token -- node /path/to/Buk-mcp/dist/src/main.js
+npm version patch            # or minor/major; bumps package.json and creates the tag vX.Y.Z
+pnpm pack                    # builds first (prepack) and writes buk-mcp-server-X.Y.Z.tgz
+cp buk-mcp-server-X.Y.Z.tgz buk-mcp-server.tgz
+git push --follow-tags
+gh release create vX.Y.Z buk-mcp-server.tgz buk-mcp-server-X.Y.Z.tgz --generate-notes
 ```
 
-A tarball (`npm pack`, then `npm install ./buk-mcp-server-1.0.0.tgz`) also works and exposes `node_modules/.bin/buk-mcp-server`.
+The stable name `buk-mcp-server.tgz` is what the `latest/download` install command resolves to. To run a local checkout instead: `npm ci && npm test`, then point `command` at `node /path/to/Buk-mcp/dist/src/main.js`.
 
 ## Test
 

@@ -4,12 +4,18 @@
   "description": "Read-only MCP server for the BUK Peru API (stdio).",
   "private": true,
   "type": "module",
-  "bin": { "buk-mcp-server": "dist/src/main.js" },
-  "files": ["dist/src"],
-  "engines": { "node": ">=22" },
+  "bin": {
+    "buk-mcp-server": "dist/src/main.js"
+  },
+  "files": [
+    "dist/src"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.json",
-    "prepare": "npm run build",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
+    "prepack": "npm run build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "npm run build && node test-runner.cjs"
   },

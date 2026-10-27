@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { realpathSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import { BukHttpClient } from './client.js';
@@ -12,6 +12,8 @@ import { createBukService } from './service.js';
 export async function main(): Promise<void> {
   let config: BukConfig;
   try {
+    // Variables already set by the host win; loadEnvFile never overrides them.
+    if (existsSync('.env')) process.loadEnvFile('.env');
     config = loadRuntimeConfig();
   } catch (error) {
     process.stderr.write(`BUK MCP: ${safeErrorMessage(error)}\n`);
