@@ -4490,6 +4490,7 @@
      "items": {
       "type": "integer"
      },
+     "collectionFormat": "multi",
      "description": "(OPCIONAL) Ids de los procesos de selección a consultar. (Devuelve los postulantes si estan al menos en un proceso de selección)"
     },
     {
@@ -4647,6 +4648,7 @@
      "items": {
       "type": "integer"
      },
+     "collectionFormat": "multi",
      "description": "(OPCIONAL) Ids de los procesos de selección a consultar. (Devuelve las postulaciones si estan al menos en un proceso de selección)"
     },
     {

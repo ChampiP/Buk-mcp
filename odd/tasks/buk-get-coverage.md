@@ -15,7 +15,7 @@ Phase-one tools are already validated against real BUK (workforce count matched 
 
 ## Tasks
 - T1 (S1,S3,S5,S8) route: inline. Extract the 119 GET operations from the live Swagger into a committed snapshot + registry types; derive the domain grouping from Swagger tags; list defects. Commit: see git log "feat(spec): add BUK GET registry".
-- T2 (S2,S5,S7) route: inline. Generalize the HTTP client to registry-driven GET (path param encoding, query allowlist per operation, per-endpoint pagination), keeping every phase-one guard. Commit: pending.
+- T2 (S2,S5,S7) route: inline. Generalize the HTTP client to registry-driven GET (path param encoding, query allowlist per operation, per-endpoint pagination), keeping every phase-one guard. Commit: see git log "feat(client): registry-driven GET policy".
 - T3 (S3,S5,S8) route: inline. Domain tool framework: discriminated-union input per tool from the registry, normalized envelope, budgets, `complete`, actionable errors. Commit: pending.
 - T4 (S1,S3) route: inline, slices of about 400 authored lines. Domain tools in batches; sensitive domains separate. Commit: pending.
 - T5 (S6) route: inline. Regression: phase-one contracts byte-identical against the previous build. Commit: pending.
@@ -27,3 +27,4 @@ Phase-one tools are already validated against real BUK (workforce count matched 
 - L2: user chose option A (~20 domain tools).
 - L3: "el documento que tienes el markdown es uno que no revise la arquitectura ni puiede ser la mejor puede mentir en algunas coas asi que no te confies"
 - L4: T1 evidence: registry has 119 GET, 3 deprecated (/absences, /areas, /areas/{id}), 10 without a 200 schema, 8 path params without `required`, 1 unresolved ref (CuentaContable). Grouping gives 22 tools = 3 phase-one + 19 new, 6 of them sensitive (job_termination, payroll_detail, compensation, documents, users_permissions, recruiting).
+- L5: T2 evidence: 39/39 tests. Differential vs f4fe4ba client over 22 phase-one inputs: 21 identical, 1 intended difference (/users now registered). Finding: `employees_id` array params (4 ops: /employees/absences/*, /employees/overtimes) publish no collectionFormat or item type in the Swagger; they are denied until the encoding is verified read-only against real BUK in T6. `/employees/{id}/statements/{year}-{month}.pdf` is routable but the client only reads JSON, so PDF handling is still open (T3/T4 decision).
