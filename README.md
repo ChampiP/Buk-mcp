@@ -126,16 +126,30 @@ Node.js >= 22. The test suite has passed on Node 22.23, 24.22, and 26.7.
 
 ## Install
 
-The package is private and is installed from a tarball:
+Run it straight from GitHub; `npm` clones the repository, installs dependencies and compiles it (`prepare` script) on first use:
 
 ```sh
-npm ci
-npm test
-npm pack
-npm install /path/to/buk-mcp-server-1.0.0.tgz
+claude mcp add buk --env BUK_AUTH_TOKEN=your_token -- npx -y github:ChampiP/Buk-mcp
 ```
 
-The binary is `node_modules/.bin/buk-mcp-server`. Configure the MCP host to run it over stdio and provide `BUK_AUTH_TOKEN` in the process environment.
+Any MCP host works with the same stdio entry: `command: npx`, `args: ["-y", "github:ChampiP/Buk-mcp"]`, `env: { BUK_AUTH_TOKEN: ... }`. The token belongs in the host's environment, never in the repository.
+
+Measured start-up: about 34 seconds on a cold cache (first run) and about 10 seconds afterwards, which can exceed a host's start-up timeout on the first run. Either run the command once by hand to warm the cache, raise the host's MCP start-up timeout, or install once and call the binary directly:
+
+```sh
+npm install -g github:ChampiP/Buk-mcp   # then use the command: buk-mcp-server
+```
+
+Pin a commit or tag (`github:ChampiP/Buk-mcp#<ref>`) so the server does not change under you.
+
+To run a local checkout instead:
+
+```sh
+npm ci && npm test && npm run build
+claude mcp add buk --env BUK_AUTH_TOKEN=your_token -- node /path/to/Buk-mcp/dist/src/main.js
+```
+
+A tarball (`npm pack`, then `npm install ./buk-mcp-server-1.0.0.tgz`) also works and exposes `node_modules/.bin/buk-mcp-server`.
 
 ## Test
 
