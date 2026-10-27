@@ -20,7 +20,7 @@ Known limits of the data, not of the server: BUK does not publish daily entry/ex
 
 ## Requirements
 
-Node.js >= 22 (declared in `engines`; the suite has so far run on Node 26 only).
+Node.js >= 22. The suite (29 tests) passes on Node 22.23, 24.22 and 26.7.
 
 ## Install
 
