@@ -1,0 +1,52 @@
+{
+  "snapshot_version": 1,
+  "source": {
+    "path": "docs/docs/BUK-MCP-GET-consolidado-para-Codex.md",
+    "sha256": "59de7c1578d72be67f1e61a6970437708fa267ecfeb8df7cb90ddd222c051e74",
+    "reviewed_on": "2026-10-26",
+    "note": "Phase-one extraction only; source document remains unchanged and untracked."
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/employees/active",
+      "tool": "buk_workforce_summary",
+      "documented_query": ["document_number", "code_sheet", "date", "exclude_pending", "page_size"],
+      "response": "{ pagination, data: EmployeeResponseCountry[] }",
+      "pagination": "next, previous, count, total_pages; no page parameter is documented for this endpoint"
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "tool": "buk_employees_search",
+      "documented_query": ["status", "document_number", "code_sheet", "company_id", "update_start_date", "custom_attr_job_name", "custom_attr_job_value", "email", "code_recinto", "page_size", "page", "sort"],
+      "response": "EmployeeResponseCountry reference; list envelope not confirmed against a live response"
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{id}",
+      "tool": "buk_employee_context",
+      "documented_path": "id is documented as employee ID or document number; phase one accepts canonical numeric employee IDs only",
+      "response": "EmployeeResponseCountry"
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{id}/jobs",
+      "tool": "buk_employee_context",
+      "documented_path": "canonical BUK employee ID",
+      "response": "{ pagination, data: JobResponseCountry[] }"
+    }
+  ],
+  "projection_fields": {
+    "identity": ["id", "full_name"],
+    "employee_dates": ["active_since", "active_until", "current_job.start_date", "current_job.end_date", "current_job.contract_term", "current_job.active_until", "current_job.contract_finishing_date_1", "current_job.contract_finishing_date_2"],
+    "job_history_dates": ["start_date", "end_date", "end_of_contract"],
+    "job_history_identifier": "not published by JobResponseCountry; rows are preserved without per-job deduplication",
+    "position": ["current_job.role.id", "current_job.role.code", "current_job.role.name", "role.id", "role.code", "role.name"],
+    "salary": ["current_job.base_wage"],
+    "documented_schedule_metadata": ["current_job.weekly_hours", "current_job.days", "current_job.working_schedule_type", "current_job.periodicity", "current_job.frequency", "regular_hours"],
+    "daily_start_or_end_time": "not published; never inferred"
+  },
+  "pagination_count_semantics": "Pagination.count is documented as total records. The MCP labels it as source count and reports a final employee count only after complete traversal and deduplication by employee id.",
+  "unverified": ["No authenticated BUK calls, tenant permissions, token scope, or response fixtures were verified; tests use synthetic responses.", "No transactional snapshot guarantee or global rate limit is documented.", "payment_currency is not a salary currency field; JobResponseCountry does not publish base_wage."]
+}

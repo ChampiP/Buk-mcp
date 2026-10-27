@@ -1,0 +1,24 @@
+{
+  "name": "buk-mcp-server",
+  "version": "1.0.0",
+  "description": "Read-only MCP server for the BUK Peru API (stdio).",
+  "private": true,
+  "type": "module",
+  "bin": { "buk-mcp-server": "dist/src/main.js" },
+  "files": ["dist/src"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "npm run build && node test-runner.cjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@types/node": "22.15.30",
+    "typescript": "7.0.2"
+  }
+}
