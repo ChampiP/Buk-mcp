@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+// Builds spec/buk-peru-get.registry.json from the public BUK Peru Swagger (GET operations only).
+// Usage: node scripts/extract-registry.mjs [swagger.json path or URL]
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const source = process.argv[2] ?? 'https://medsculp.buk.pe/api/peru/es/api_docs';
+const text = /^https?:/.test(source) ? await (await fetch(source)).text() : readFileSync(source, 'utf8');
+const swagger = JSON.parse(text);
+
+function resolveRef(ref) {
+  return ref.replace('#/definitions/', '').split('/').reduce((node, key) => node?.[key], swagger.definitions);
+}
+function refs(node, found = new Set()) {
+  if (Array.isArray(node)) node.forEach((item) => refs(item, found));
+  else if (node && typeof node === 'object') {
+    if (typeof node.$ref === 'string') found.add(node.$ref.replace('#/definitions/', ''));
+    Object.values(node).forEach((value) => refs(value, found));
+  }
+  return found;
+}
+const unresolved = new Set();
+function closure(schema) {
+  const seen = new Set();
+  const queue = [...refs(schema)];
+  while (queue.length) {
+    const name = queue.pop();
+    if (seen.has(name)) continue;
+    seen.add(name);
+    const definition = resolveRef(`#/definitions/${name}`);
+    if (!definition) unresolved.add(name);
+    else queue.push(...refs(definition));
+  }
+  return [...seen].sort();
+}
+
+const operations = [];
+for (const [path, item] of Object.entries(swagger.paths)) {
+  const get = item.get;
+  if (!get) continue;
+  const parameters = (get.parameters ?? []).map((p) => ({
+    name: p.name, in: p.in, required: p.required === true, type: p.type ?? null,
+    ...(p.enum ? { enum: p.enum } : {}), ...(p.format ? { format: p.format } : {}),
+    ...(p.items ? { items: p.items } : {}), ...(p.default !== undefined ? { default: p.default } : {}),
+    description: p.description ?? '',
+  }));
+  const ok = get.responses?.['200'];
+  operations.push({
+    path,
+    tag: get.tags?.[0] ?? null,
+    summary: get.summary ?? '',
+    deprecated: get.deprecated === true,
+    permissions: (get.description ?? '').match(/\*\*Permisos requeridos[^]*$/)?.[0]?.replace(/\s+/g, ' ').trim() ?? null,
+    parameters,
+    response200: ok?.schema ? { schema: ok.schema, definitions: closure(ok.schema) } : null,
+    responseCodes: Object.keys(get.responses ?? {}),
+  });
+}
+operations.sort((a, b) => a.path.localeCompare(b.path));
+
+const registry = {
+  registry_version: 1,
+  source: { url: 'https://medsculp.buk.pe/api/peru/es/api_docs', sha256: createHash('sha256').update(text).digest('hex'), swagger: swagger.swagger, basePath: swagger.basePath },
+  unresolved_refs: [...unresolved].sort(),
+  operations,
+};
+writeFileSync(new URL('../spec/buk-peru-get.registry.json', import.meta.url), JSON.stringify(registry, null, 1) + '\n');
+console.error(`operations=${operations.length} unresolved=${[...unresolved].join(',') || 'none'}`);

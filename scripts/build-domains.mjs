@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+// Assigns every registry operation to exactly one MCP tool. Rules are ordered; first match wins.
+// Sensitive tools are kept apart so a host can gate them individually.
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const registry = JSON.parse(readFileSync(new URL('../spec/buk-peru-get.registry.json', import.meta.url), 'utf8'));
+const phaseOne = new Map([
+  ['/employees/active', 'buk_workforce_summary'], ['/employees', 'buk_employees_search'],
+  ['/employees/{id}', 'buk_employee_context'], ['/employees/{id}/jobs', 'buk_employee_context'],
+]);
+const rules = [
+  ['buk_employee_sections', false, /^\/(employees\/\{id\}\/(subordinates|plans)|employees\/\{employee_id\}\/(plans|family_responsibilities)\/|people\/|substitutions$)/],
+  ['buk_job_events', false, /^\/jobs\/events\//],
+  ['buk_job_termination', true, /^\/jobs\/\{id\}\/termination$/],
+  ['buk_organization', false, /^\/(areas|organization\/areas|groups|companies|centro_costo_definitions|locations|recintos)/],
+  ['buk_org_catalogs', false, /^\/(roles|role_families|unions|holidays)/],
+  ['buk_vacations', false, /^\/(vacations|vacation_definitions|employees\/\{id\}\/(vacation_definitions|vacations_available|earned_vacations))/],
+  ['buk_absences', false, /^\/(absences|employees\/absences\/)/],
+  ['buk_attendance', false, /^\/(attendances|working_days|employees\/overtimes$)/],
+  ['buk_payroll_processes', false, /^\/(process|process_periods)(\/|$)/],
+  ['buk_payroll_detail', true, /^\/(payroll_detail|employees\/\{employee_id\}\/payroll_detail|employees\/\{id\}\/statements)/],
+  ['buk_compensation', true, /^\/(items|credits|employees\/\{id\}\/(assigns|pension_savings))/],
+  ['buk_documents', true, /^\/(docs|employees\/\{id\}\/docs)/],
+  ['buk_users_permissions', true, /^\/(users|permission_roles)/],
+  ['buk_accounting', false, /^\/(accounting|accounting_structure|ledger_account)/],
+  ['buk_recruiting', true, /^\/recruiting/],
+  ['buk_talent_training', false, /^\/(talent|training)/],
+  ['buk_benefits', false, /^\/benefits/],
+  ['buk_piecework', false, /^\/piecework/],
+  ['buk_company_data', false, /^\/(kpis|kpi_data|company_variables|company_variable_registries|workflow|versions)/],
+];
+const domains = {};
+const unassigned = [];
+for (const { path } of registry.operations) {
+  let tool = phaseOne.get(path);
+  let sensitive = false;
+  if (!tool) {
+    const rule = rules.find(([, , pattern]) => pattern.test(path));
+    if (rule) [tool, sensitive] = rule;
+  }
+  if (!tool) { unassigned.push(path); continue; }
+  const entry = (domains[tool] ??= { sensitive: [...phaseOne.values()].includes(tool) ? false : sensitive, phase_one: [...phaseOne.values()].includes(tool), operations: [] });
+  entry.operations.push(path);
+}
+if (unassigned.length) { console.error('UNASSIGNED:', unassigned.join(' ')); process.exit(1); }
+writeFileSync(new URL('../spec/domains.json', import.meta.url), JSON.stringify({ domains_version: 1, note: 'Proposed grouping derived from Swagger tags and path prefixes; sensitive tools are gated separately.', domains }, null, 1) + '\n');
+const total = Object.values(domains).reduce((n, d) => n + d.operations.length, 0);
+console.error(`tools=${Object.keys(domains).length} operations=${total}`);
+for (const [name, d] of Object.entries(domains)) console.error(`${d.sensitive ? 'S' : ' '} ${name} ${d.operations.length}`);

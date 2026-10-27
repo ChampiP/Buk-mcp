@@ -1,0 +1,5874 @@
+{
+ "registry_version": 1,
+ "source": {
+  "url": "https://medsculp.buk.pe/api/peru/es/api_docs",
+  "sha256": "3fdba6606d091a7974e211cdc31abd6017d78bd21c71fb475b6e3d3fe729d478",
+  "swagger": "2.0",
+  "basePath": "/api/v1/peru"
+ },
+ "unresolved_refs": [
+  "CuentaContable"
+ ],
+ "operations": [
+  {
+   "path": "/absences",
+   "tag": "Ausencias",
+   "summary": "Listar inasistencias",
+   "deprecated": true,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de inicio del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de término del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "type",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "licence",
+      "absence",
+      "leave",
+      "paid_leave"
+     ],
+     "description": "Tipo de inasistencia"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Absence::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/absences/absence",
+   "tag": "Inasistencias",
+   "summary": "Listar ausencias",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de inicio del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de término del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Absences::Absence::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Absence::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/absences/absence/{id}",
+   "tag": "Inasistencias",
+   "summary": "Ver una ausencia",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id de la ausencia"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Absence::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Absence::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/absences/absence/types",
+   "tag": "Inasistencias",
+   "summary": "Listar tipos de ausencias",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "with_pay",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "description": "(OPCIONAL) Con goce de sueldo?"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/LicenceType::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/absences/absence/types/{id}",
+   "tag": "Inasistencias",
+   "summary": "Ver un tipo de ausencia",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id del tipo de ausencia"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/LicenceType::Response"
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/absences/licence",
+   "tag": "Licencias",
+   "summary": "Listar licencias",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de inicio del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de término del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Absences::Licence::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Licence::Response",
+     "LicenceBase",
+     "LicenceType",
+     "MedicIdentifier",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/absences/licence/{id}",
+   "tag": "Licencias",
+   "summary": "Ver una licencia",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id de la licencia"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Licence::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Licence::Response",
+     "LicenceBase",
+     "LicenceType",
+     "MedicIdentifier"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/absences/licence/types",
+   "tag": "Licencias",
+   "summary": "Listar tipos de licencias",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "with_pay",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "description": "(OPCIONAL) Con goce de sueldo?"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/LicenceType::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/absences/licence/types/{id}",
+   "tag": "Licencias",
+   "summary": "Ver un tipo de licencia",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id del tipo de licencia"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/LicenceType::Response"
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/absences/permission",
+   "tag": "Permisos",
+   "summary": "Listar permisos",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de inicio del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha de término del rango en formato YYYY-MM-DD."
+    },
+    {
+     "name": "time_measure",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "per_day",
+      "per_hour",
+      "both"
+     ],
+     "description": "(OPCIONAL) tipo de Permiso"
+    },
+    {
+     "name": "start_time",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Hora de inicio. Formato HH:MM, por ejemplo 13:00."
+    },
+    {
+     "name": "end_time",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Hora de término. Formato HH:MM, por ejemplo 14:30."
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Absences::Permission::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Permission::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/absences/permission/{id}",
+   "tag": "Permisos",
+   "summary": "Ver un permiso",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id del permiso"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Permission::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Permission::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/absences/permission/types",
+   "tag": "Permisos",
+   "summary": "Listar tipos de permiso",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "with_pay",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "description": "(OPCIONAL) Con goce de sueldo?"
+    },
+    {
+     "name": "time_measure",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "per_day",
+      "per_hour",
+      "both"
+     ],
+     "description": "(OPCIONAL) tipo de Permiso"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/LicenceType::Response"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/absences/permission/types/{id}",
+   "tag": "Permisos",
+   "summary": "Ver un tipo de permiso",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id del tipo de permiso"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/LicenceType::Response"
+      }
+     }
+    },
+    "definitions": [
+     "LicenceType::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting",
+   "tag": "Centralización contable",
+   "summary": "Centralización contable",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "month",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Mes consultado (1 - 12). OBLIGATORIO si no se indica process_id. Si se indica process_id, MONTH sera ignorado."
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Año consultado. OBLIGATORIO si no se indica process_id. Si se indica process_id, YEAR sera ignorado."
+    },
+    {
+     "name": "process_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID del proceso a consultar. OBLIGATORIO si no se indica año y mes"
+    },
+    {
+     "name": "company_id",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "ID o RUT de la Empresa a consultar."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Accounting"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Accounting",
+     "AccountingItem",
+     "EmployeePersonIdentifier",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting_structure/assignments",
+   "tag": "Estructuras Contables",
+   "summary": "Obtener asignaciones de estructuras contables",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "empresa_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID de la empresa (requerido si no se proporciona accounting_structure_id)"
+    },
+    {
+     "name": "accounting_structure_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID de la estructura contable (requerido si no se proporciona empresa_id)"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "properties": {
+         "id": {
+          "type": "integer"
+         },
+         "accounting_structure_id": {
+          "type": "integer"
+         },
+         "empresa_id": {
+          "type": "integer"
+         },
+         "accounting_structure": {
+          "properties": {
+           "id": {
+            "type": "integer"
+           },
+           "codigo": {
+            "type": "string"
+           },
+           "nombre": {
+            "type": "string"
+           },
+           "separador": {
+            "type": "string"
+           },
+           "extension_archivo": {
+            "type": "string"
+           }
+          }
+         },
+         "empresa": {
+          "properties": {
+           "id": {
+            "type": "integer"
+           },
+           "nombre": {
+            "type": "string"
+           },
+           "rut": {
+            "type": "string"
+           }
+          }
+         },
+         "created_at": {
+          "type": "string",
+          "format": "datetime"
+         },
+         "updated_at": {
+          "type": "string",
+          "format": "datetime"
+         }
+        }
+       }
+      }
+     }
+    },
+    "definitions": []
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "401",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting_structure/export",
+   "tag": "Estructuras Contables",
+   "summary": "Exportar datos contables",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "accounting_structure_assignment_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la asignación de estructura contable"
+    },
+    {
+     "name": "month",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Mes (1-12)"
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Año"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "object",
+       "description": "Hash donde la clave es el identificador único de la empresa y el valor es un array de objetos con los datos contables",
+       "example": {
+        "12.345.678-9": [
+         {
+          "Column0": "92101",
+          "Column1": "Sueldo base",
+          "Column2": "500000",
+          "Column3": "101"
+         }
+        ]
+       }
+      },
+      "pagination": {
+       "description": "Información de paginación",
+       "properties": {
+        "current_page": {
+         "type": "integer"
+        },
+        "total_pages": {
+         "type": "integer"
+        },
+        "total_count": {
+         "type": "integer"
+        }
+       }
+      }
+     }
+    },
+    "definitions": []
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "401",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting_structure/export_process_differences",
+   "tag": "Estructuras Contables",
+   "summary": "Contabilidad del reproceso con estructura contable",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "accounting_structure_assignment_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la asignación de estructura contable. OBLIGATORIO"
+    },
+    {
+     "name": "process_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID del subproceso. OBLIGATORIO"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "object",
+       "description": "Hash donde la clave es el RUT de la empresa y el valor es un array con los datos contables de diferencias",
+       "example": {
+        "12.345.678-9": [
+         {
+          "Column0": "92101",
+          "Column1": "Sueldo base",
+          "Column2": "500000",
+          "Column3": "101"
+         }
+        ]
+       }
+      }
+     }
+    },
+    "definitions": []
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "401",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting_structure/structures",
+   "tag": "Estructuras Contables",
+   "summary": "Obtener estructuras contables de una empresa",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "empresa_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la empresa"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "properties": {
+         "id": {
+          "type": "integer",
+          "description": "ID de la estructura contable"
+         },
+         "codigo": {
+          "type": "string",
+          "description": "Código único de la estructura"
+         },
+         "nombre": {
+          "type": "string",
+          "description": "Nombre de la estructura"
+         },
+         "separador": {
+          "type": "string",
+          "description": "Tipo de separador (punto_coma, coma, etc.)"
+         },
+         "extension_archivo": {
+          "type": "string",
+          "description": "Extensión del archivo (xlsx, csv, txt, etc.)"
+         },
+         "created_at": {
+          "type": "string",
+          "format": "datetime"
+         },
+         "updated_at": {
+          "type": "string",
+          "format": "datetime"
+         }
+        }
+       }
+      }
+     }
+    },
+    "definitions": []
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "401",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting/export",
+   "tag": "Centralización contable",
+   "summary": "Contabilidad",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "month",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Mes consultado (1 - 12)"
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Año consultado"
+    },
+    {
+     "name": "company_id",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "ID o RUT de la Empresa a consultar."
+    },
+    {
+     "name": "subprocess_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) ID de Subproceso"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de la página a consultar. Por defecto, la primera página."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página."
+    }
+   ],
+   "response200": null,
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting/export_detail",
+   "tag": "Centralización contable",
+   "summary": "Contabilidad por Liquidación",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "month",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Mes consultado (1 - 12)"
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Año consultado"
+    },
+    {
+     "name": "company_id",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "ID o RUT de la Empresa a consultar."
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de la página a consultar. Por defecto, la primera página."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página."
+    }
+   ],
+   "response200": null,
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting/export_period",
+   "tag": "Centralización contable",
+   "summary": "Contabilidad",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "process_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID de Proceso"
+    },
+    {
+     "name": "company_id",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": {}
+    },
+    {
+     "name": "subprocess_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) ID de Subproceso"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de la página a consultar. Por defecto, la primera página."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página."
+    }
+   ],
+   "response200": null,
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting/export_process_differences",
+   "tag": "Centralización contable",
+   "summary": "Contabilidad del reproceso",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "process_id",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "ID del subproceso. OBLIGATORIO"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Accounting"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Accounting",
+     "AccountingItem",
+     "EmployeePersonIdentifier",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/accounting/vacations/balance",
+   "tag": "Centralización contable",
+   "summary": "Mostrar saldo de vacaciones por mes",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Identificador del Colaborador"
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Año consultado"
+    },
+    {
+     "name": "month",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Mes consultado (1 - 12)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/VacationBalance"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "VacationBalance"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/areas",
+   "tag": "Áreas",
+   "summary": "Listar áreas",
+   "deprecated": true,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "active",
+      "inactive",
+      "both"
+     ],
+     "default": "both",
+     "description": "(OPCIONAL) Filtra los resultados por el estado del área."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Area"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Area",
+     "AreaFirstLevel",
+     "AreaSecondLevel",
+     "Pagination",
+     "parent_child_area"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/areas/{id}",
+   "tag": "Áreas",
+   "summary": "Obtener un área en especifico por ID",
+   "deprecated": true,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del área a consultar"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "description": "Como respuesta recibimos todos los campos correspondiente a la información del área consultada dentro",
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Area"
+      }
+     }
+    },
+    "definitions": [
+     "Area",
+     "AreaFirstLevel",
+     "AreaSecondLevel",
+     "parent_child_area"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/attendances/non-worked-hours",
+   "tag": "Horas no trabajadas",
+   "summary": "Listar horas no trabajadas",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha inicial del periodo de consulta en YYYY-MM-DD"
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha final del periodo de consulta en YYYY-MM-D"
+    },
+    {
+     "name": "sort",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Párametro para ordenar registros por su id, el único valor posible es 'id'"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/Attendances::NonWorkedHours::Index"
+    },
+    "definitions": [
+     "Attendances::NonWorkedHours::Index",
+     "Attendances::NonWorkedHours::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/attendances/non-worked-hours/{id}",
+   "tag": "Horas no trabajadas",
+   "summary": "Ver un registro de hora no trabajada",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id de la hora no trabajada"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Attendances::NonWorkedHours::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Attendances::NonWorkedHours::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/attendances/non-worked-hours/types",
+   "tag": "Horas no trabajadas",
+   "summary": "Listar tipos de horas no trabajadas",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Attendances::NonWorkedHours::Type"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Attendances::NonWorkedHours::Type"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/attendances/overtime",
+   "tag": "Horas Extras",
+   "summary": "Listar horas extras",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha inicial del periodo de consulta en YYYY-MM-DD"
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha final del periodo de consulta en YYYY-MM-DD"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/Attendances::Overtime::Index"
+    },
+    "definitions": [
+     "Attendances::Overtime::Index",
+     "Attendances::Overtime::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/attendances/overtime/{id}",
+   "tag": "Horas Extras",
+   "summary": "Ver un registro de sobretiempo",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": false,
+     "type": "integer",
+     "description": "Id del sobretiempo"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Attendances::Overtime::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Attendances::Overtime::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/attendances/overtime/types",
+   "tag": "Horas Extras",
+   "summary": "Listar tipos de horas extras",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Attendances::Overtime::Type"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Attendances::Overtime::Type"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/benefits/benefit_requests",
+   "tag": "Beneficios",
+   "summary": "Lista todas las solicitudes de beneficios",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de beneficios en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Estado de la solicitud. Valores permitidos: in_process, approved, rejected, pre_approved, incomplete, cancel_request, canceled"
+    },
+    {
+     "name": "person_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) ID de la persona que solicitó el beneficio. Se utiliza para filtrar solicitudes de una persona específica"
+    },
+    {
+     "name": "available_version_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) ID de la versión específica del beneficio solicitado."
+    },
+    {
+     "name": "requested_at_from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha desde la cual filtrar las solicitudes (formato: YYYY-MM-DD). Permite buscar solicitudes realizadas a partir de una fecha específica"
+    },
+    {
+     "name": "requested_at_to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha hasta la cual filtrar las solicitudes (formato: YYYY-MM-DD). Permite buscar solicitudes realizadas hasta una fecha específica"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "default": 1,
+     "description": "(OPCIONAL) Número de página para la paginación de resultados. Por defecto es 1 si no se especifica"
+    },
+    {
+     "name": "per_page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "default": 25,
+     "description": "(OPCIONAL) Cantidad de registros por página (máximo 100). Por defecto es 25 si no se especifica"
+    },
+    {
+     "name": "sort_by",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "default": "id",
+     "description": "(OPCIONAL) Campo por el cual ordenar los resultados. Valores permitidos: id, person_id, approver_id, available_version_id, status, points_cost, requested_at, status_date, created_at"
+    },
+    {
+     "name": "sort_order",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "asc",
+      "desc"
+     ],
+     "default": "desc",
+     "description": "(OPCIONAL) Dirección del ordenamiento. Valores permitidos: asc (ascendente), desc (descendente). Por defecto es desc"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/BenefitRequestResponse"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BenefitRequestResponse",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/benefits/benefit_requests/{id}",
+   "tag": "Beneficios",
+   "summary": "Obtiene una solicitud de beneficio específica",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de beneficios en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la solicitud de beneficio"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/BenefitRequestResponse"
+      }
+     }
+    },
+    "definitions": [
+     "BenefitRequestResponse"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/benefits/benefit_versions/{id}",
+   "tag": "Beneficios",
+   "summary": "Obtiene información de una versión de beneficio",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de beneficios en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la versión de beneficio"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/BenefitVersionResponse"
+      }
+     }
+    },
+    "definitions": [
+     "BenefitVersionResponse"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/centro_costo_definitions",
+   "tag": "Centro de costo",
+   "summary": "Mostrar centros de costo",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño de la página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Nro de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/CentroCostoDefinition"
+    },
+    "definitions": [
+     "CentroCostoDefinition"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/centro_costo_definitions/{id}",
+   "tag": "Centro de costo",
+   "summary": "Mostrar centro de costo",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del centro de costo"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/CentroCostoDefinition"
+    },
+    "definitions": [
+     "CentroCostoDefinition"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/companies",
+   "tag": "Empresas",
+   "summary": "Listar Empresas",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Company"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Company",
+     "CompanyBank",
+     "LegalAgent",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/company_variable_registries/{id}",
+   "tag": "Variables de Registros Empresas",
+   "summary": "Listar registros de variables de Empresas",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Id de variable Empresa registro de la cual se desea listar."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/CompanyVariableRegistry"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "CompanyVariableRegistry",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/company_variables/{empresa_id}",
+   "tag": "Variables de Empresas",
+   "summary": "Listar variables de Empresas",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "empresa_id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Id de Empresa de la cual se desea listar sus variables de Empresa"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/CompanyVariable"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "CompanyVariable",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/credits",
+   "tag": "Créditos",
+   "summary": "Listar créditos",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de ítems en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": true,
+     "type": "string",
+     "format": "date",
+     "description": "Filtra los créditos que son vigentes para esta fecha"
+    },
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los créditos con este nombre"
+    },
+    {
+     "name": "type",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los créditos del tipo especificado ([\"credito_personal\", \"dental\", \"leasing\", \"seguro_vida\", \"credito_otro\"])"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Credit"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Credit",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/credits/{id}",
+   "tag": "Créditos",
+   "summary": "Mostrar un crédito",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de ítems en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del crédito a consultar"
+    },
+    {
+     "name": "year",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Año a consultar en YYYY"
+    },
+    {
+     "name": "month",
+     "in": "query",
+     "required": true,
+     "type": "integer",
+     "description": "Mes a consultar (1 - 12)"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Credit"
+      }
+     }
+    },
+    "definitions": [
+     "Credit"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/docs/{id}",
+   "tag": "Colaboradores",
+   "summary": "Obtener especificaciones de un documento",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos para ver y descargar documentos de empleados en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del documento"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "employee_id": {
+       "type": "integer",
+       "description": "ID del empleado",
+       "nullable": true,
+       "example": 123
+      },
+      "employee_file": {
+       "$ref": "#/definitions/EmployeeFileDetail"
+      }
+     }
+    },
+    "definitions": [
+     "DocumentSignature",
+     "EmployeeFileDetail"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees",
+   "tag": "Colaboradores",
+   "summary": "Mostrar Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Estado del Colaborador. valores permitidos: activo, inactivo, pendiente"
+    },
+    {
+     "name": "document_number",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Número de Documento"
+    },
+    {
+     "name": "code_sheet",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Código de ficha del Colaborador"
+    },
+    {
+     "name": "company_id",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Id de la Empresa"
+    },
+    {
+     "name": "update_start_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de actualización, en caso de usar el atributo company_id validara según esta fecha el trabajo activo en el momento para definir la información a mostrar, si esta vacio se considerará fecha actual"
+    },
+    {
+     "name": "custom_attr_job_name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Nombre del atributo personalizado de trabajo"
+    },
+    {
+     "name": "custom_attr_job_value",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Valor del atributo personalizado de trabajo (si es más de uno, sepárelos por ::, por ejemplo Valor1::Valor2)"
+    },
+    {
+     "name": "email",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Email laboral del Colaborador"
+    },
+    {
+     "name": "code_recinto",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Código del Recinto"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño de la página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Nro de página"
+    },
+    {
+     "name": "sort",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Parámetro para ordenar registros, el único valor posible es 'id', si no se envia se ordena por nombre"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/EmployeeResponseCountry"
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "BossModel",
+     "EmployeeAddressResponse",
+     "EmployeeCurrentJob",
+     "EmployeeFamilyResponsability",
+     "EmployeeResponseCountry",
+     "RecintoModel",
+     "ResponsabilityDetail",
+     "Role",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{employee_id}/family_responsibilities/{id}",
+   "tag": "Colaboradores",
+   "summary": "Mostrar Grupo Familiar de un Colaborador",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. **General requerida para utilizar este endpoint:** * Habilitar grupo familiar, valor: true.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del Colaborador a consultar."
+    },
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del Grupo Familiar a consultar."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/EmployeeFamilyResponsibility"
+      }
+     }
+    },
+    "definitions": [
+     "EmployeeFamilyResponsibility",
+     "ResponsibilityDetail"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/{employee_id}/payroll_detail",
+   "tag": "Boletas de Pago",
+   "summary": "Mostar detalle del Colaborador",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del postulante por el cual se está consultando."
+    },
+    {
+     "name": "period_type",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Tipo de periodo por el que quieres consultar, puede ser weekly, semi_monthly o monthly. Es monthly por defecto."
+    },
+    {
+     "name": "start",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de inicio de la liquidacion (Formato DD-MM-YYYY)"
+    },
+    {
+     "name": "end",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de término de la liquidacion (Formato DD-MM-YYYY)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "nationality": {
+       "type": "string"
+      },
+      "civil_status": {
+       "type": "string"
+      },
+      "private_role": {
+       "type": "boolean"
+      },
+      "code_sheet": {
+       "type": "string"
+      },
+      "pension_regime": {
+       "type": "string"
+      },
+      "pension_fund": {
+       "type": "string"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Settlement"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Settlement",
+     "SettlementLine"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{employee_id}/plans/{id}",
+   "tag": "Colaboradores",
+   "summary": "Mostrar plan de un empleado",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del Colaborador a consultar."
+    },
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del plan a consultar."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/PlanResponseCountry"
+      }
+     }
+    },
+    "definitions": [
+     "PlanResponseCountry"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}",
+   "tag": "Colaboradores",
+   "summary": "Mostrar Colaborador",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del Colaborador a consultar. En caso de ser Número de Documento, no debe tener puntos ni guion."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/EmployeeResponseCountry"
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "BossModel",
+     "EmployeeAddressResponse",
+     "EmployeeCurrentJob",
+     "EmployeeFamilyResponsability",
+     "EmployeeResponseCountry",
+     "RecintoModel",
+     "ResponsabilityDetail",
+     "Role",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/assigns",
+   "tag": "Items",
+   "summary": "Mostrar asignaciones de ítems de un empleado",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'. * Permisos de ítems en: 'Lectura'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del empleado a consultar"
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Filtra las asignaciones que son vigentes para esta fecha"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    },
+    {
+     "name": "tipo_descuento",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "legal",
+      "anticipo",
+      "credito",
+      "otro"
+     ],
+     "description": "Filtra las asignaciones por tipo de descuento del ítem. Valores válidos: legal, anticipo, credito, otro."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Employee::Assign"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Bono::Minimal",
+     "Employee::Assign",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/employees/{id}/docs",
+   "tag": "Colaboradores",
+   "summary": "Obtener documentos de empleado",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos para ver y descargar documentos de empleados en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del empleado a consultar."
+    },
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Desde - Rango de fechas de la creación del documento. Ejemplo: 2020/12/10"
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Hasta - Rango de fechas de la creación del documento. Ejemplo 2020/12/11"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/EmployeeFileListDetail"
+     }
+    },
+    "definitions": [
+     "EmployeeFileListDetail"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/docs/{file_id}",
+   "tag": "Colaboradores",
+   "summary": "Obtiene un documento de empleado",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos para ver y descargar documentos de empleados en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del empleado"
+    },
+    {
+     "name": "file_id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del documento"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/EmployeeFileDetail"
+    },
+    "definitions": [
+     "DocumentSignature",
+     "EmployeeFileDetail"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/earned_vacations",
+   "tag": "Colaboradores",
+   "summary": "Mostrar detalle de vacaciones percibidas y simulación de proporcionales",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del Colaborador a consultar. En caso de ser Número de Documento, no debe tener puntos ni guion."
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "'La fecha en la que se calculará las vacaciones percibidas y fecha hasta que se simularán las proporcionales (Formato: DD-MM-YYYY), por defecto será el día de hoy'\n"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/EarnedVacations"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "EarnedVacations",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/employees/{id}/jobs",
+   "tag": "Colaboradores",
+   "summary": "Mostrar trabajos de un Colaborador",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del Colaborador a consultar."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/JobResponseCountry"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "BossModel",
+     "JobResponseCountry",
+     "Pagination",
+     "Role",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/pension_savings",
+   "tag": "Colaboradores",
+   "summary": "Mostrar ahorros previsionales",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'. * Permisos de ítems en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "Colaborador ID"
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Filtra los ahorros previsionales que son vigentes para esta fecha"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/PensionSaving"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "PensionSaving"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/{id}/plans",
+   "tag": "Colaboradores",
+   "summary": "Mostrar planes de un empleado",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del Colaborador a consultar."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/PlanResponseCountry"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "PlanResponseCountry"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/statements/{year}-{month}.pdf",
+   "tag": "Boletas de Pago",
+   "summary": "Archivo de la Boleta de Pago",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Identificador del Colaborador"
+    },
+    {
+     "name": "year",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Año consultado"
+    },
+    {
+     "name": "month",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Mes consultado (1 - 12)"
+    }
+   ],
+   "response200": null,
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/{id}/subordinates",
+   "tag": "Colaboradores",
+   "summary": "Mostrar Colaboradores subordinados a otro Colaborador",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del Colaborador a consultar. En caso de ser Número de Documento, no debe tener puntos ni guion."
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha en el cual evaluar si los Colaboradores subordinados tienen contrato vigente, en formato YYYY-MM-DD. En caso de no ingresar este parámetro se usará por defecto la fecha de hoy en el cual se encuentra la plataforma."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/MinimalEmployee"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "MinimalEmployee",
+     "MinimalEmployeeCountry",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/{id}/vacation_definitions",
+   "tag": "Colaboradores",
+   "summary": "Listar políticas de vacaciones asociadas al empleados",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'. * Permisos de vacaciones en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "Id del empleados"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/VacationDefinitionOutput"
+    },
+    "definitions": [
+     "VacationDefinition",
+     "VacationDefinitionOutput",
+     "VacationType"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/employees/{id}/vacations_available",
+   "tag": "Colaboradores",
+   "summary": "Mostrar cantidad de días disponible para vacaciones",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del Colaborador a consultar. En caso de ser Número de Documento, no debe tener puntos ni guion."
+    },
+    {
+     "name": "discount",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "enum": [
+      true,
+      false
+     ],
+     "description": "Descontar vacaciones tomadas a futuro. (true, false)"
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "La fecha en la que se calculará las vacaciones pendientes (Formato: DD-MM-YYYY), por defecto será el último día del mes abierto"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/VacationsAvailable"
+    },
+    "definitions": [
+     "CurrentJobDetails",
+     "Vacations",
+     "VacationsAvailable"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/employees/absences/absences",
+   "tag": "Colaboradores",
+   "summary": "Ver ausencias de Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employees_id",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "description": "Ids Colaboradores"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Absence::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Absence::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/absences/licences",
+   "tag": "Colaboradores",
+   "summary": "Ver licencias de Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employees_id",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "description": "Ids Colaboradores"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Licence::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Licence::Response",
+     "LicenceBase",
+     "LicenceType",
+     "MedicIdentifier"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/absences/permissions",
+   "tag": "Colaboradores",
+   "summary": "Ver permisos de Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employees_id",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "description": "Ids Colaboradores"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Absences::Permission::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Absence::Response",
+     "Absences::Permission::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/employees/active",
+   "tag": "Colaboradores",
+   "summary": "Listar Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "document_number",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Número de Documento"
+    },
+    {
+     "name": "code_sheet",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Código de ficha del Colaborador"
+    },
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha  en el cual evaluar si los Colaboradores tienen contrato vigente, en formato YYYY-MM-DD. En caso de no ingresar este parámetro se usará por defecto la fecha de hoy en el cual se encuentra la plataforma"
+    },
+    {
+     "name": "exclude_pending",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "description": "Se excluyen los Colaboradores pendientes en el caso de enviar este parámetro como `true`"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/EmployeeResponseCountry"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "BossModel",
+     "EmployeeAddressResponse",
+     "EmployeeCurrentJob",
+     "EmployeeFamilyResponsability",
+     "EmployeeResponseCountry",
+     "Pagination",
+     "RecintoModel",
+     "ResponsabilityDetail",
+     "Role",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/employees/overtimes",
+   "tag": "Colaboradores",
+   "summary": "Listar horas extras asociadas a Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employees_id",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "description": "Ids Colaboradores"
+    },
+    {
+     "name": "overtime_type_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(Opcional) Id del tipo de sobretiempo"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Attendances::Overtime::Index"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Attendances::Overtime::Index",
+     "Attendances::Overtime::Response",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/groups",
+   "tag": "Grupos",
+   "summary": "Listar grupos",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Cantidad de registros por página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/FilterQueryModel"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "FilterQueryModel",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/groups/{id}",
+   "tag": "Grupos",
+   "summary": "Mostrar grupo",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del grupo"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Cantidad de registros por página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "id": {
+       "type": "integer",
+       "description": "ID del grupo",
+       "example": 1
+      },
+      "group_name": {
+       "type": "string",
+       "description": "Nombre del grupo",
+       "example": "empleados-ti"
+      },
+      "updated_at": {
+       "type": "string",
+       "format": "date-time",
+       "description": "Última actualización",
+       "example": "2024-01-15T10:30:00.000Z"
+      },
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "participants": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/FilterQueryParticipant"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "FilterQueryParticipant",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/holidays",
+   "tag": "Feriados",
+   "summary": "Listar días feriados",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Obtiene solo los feriados posteriores a esta fecha. Si se omite, se usa por defecto el inicio de año"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Holiday"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Holiday",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/items",
+   "tag": "Ítems",
+   "summary": "Listar ítems",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de ítems en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Filtra los ítems que son vigentes para esta fecha"
+    },
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los ítems con este nombre"
+    },
+    {
+     "name": "code",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los ítems con este código"
+    },
+    {
+     "name": "type",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los ítems del tipo especificado ('haber', 'descuento', 'anticipo', 'aporte', 'informativo')"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Bono"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Bono",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/jobs/{id}/termination",
+   "tag": "Finiquitos",
+   "summary": "Obtener finiquito",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID del trabajo"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Finiquito"
+      }
+     }
+    },
+    "definitions": [
+     "Finiquito",
+     "FiniquitoBase",
+     "FiniquitoDescuentos",
+     "FiniquitoHaberes"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/jobs/events/hires",
+   "tag": "Trabajos",
+   "summary": "Listar los altas de trabajos para los Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "start_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de inicio del periodo de consulta en YYYY-MM-DD."
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de término del periodo de consulta en YYYY-MM-DD."
+    },
+    {
+     "name": "sort",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Parámetro para ordenar registros, el único valor posible es 'id', si no se envia se ordena por nombre"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página de trabajos a obtener. Por defecto se muestra la primera."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/hire"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "hire"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/jobs/events/movements",
+   "tag": "Trabajos",
+   "summary": "Listar los movimientos de trabajos para los Colaboradores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "start_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de inicio del periodo de consulta en YYYY-MM-DD."
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de término del periodo de consulta en YYYY-MM-DD."
+    },
+    {
+     "name": "sort",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Parámetro para ordenar registros, el único valor posible es 'id', si no se envia se ordena por nombre"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página de trabajos a obtener. Por defecto se muestra la primera."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/job_movement"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "job_movement"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/jobs/events/terminations",
+   "tag": "Trabajos",
+   "summary": "Listar las bajas",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "start_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de inicio del periodo de consulta"
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de término del periodo de consulta"
+    },
+    {
+     "name": "sort",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Parámetro para ordenar registros, el único valor posible es 'id', si no se envia se ordena por nombre"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Página de trabajos a obtener. Por defecto se muestra la primera."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/TerminatedJob"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "TerminatedJob"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/kpi_data",
+   "tag": "KPIs",
+   "summary": "Listar datos de KPI",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de datos de KPI en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "kpi_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Filtra los datos de KPI asociados con el tipo de KPI indicado"
+    },
+    {
+     "name": "empresa_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": {}
+    },
+    {
+     "name": "area_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Filtra los datos de KPI asociados con la área indicada"
+    },
+    {
+     "name": "employee_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Filtra los datos de KPI asociados con el empleado indicado"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/KPIDatum"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "KPIDatum",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/kpis",
+   "tag": "KPIs",
+   "summary": "Listar tipos de KPI",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tipos de KPI en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los tipos de KPI con este nombre"
+    },
+    {
+     "name": "code",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los tipos de KPI con este código"
+    },
+    {
+     "name": "related_to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los tipos de KPI con esta entidad asociada"
+    },
+    {
+     "name": "units",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los tipos de KPI con esta unidad de medida"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/KPI"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "KPI",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/ledger_account",
+   "tag": "Centralización contable",
+   "summary": "Listar cuentas contables",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de contabilidad en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/CuentaContable"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "CuentaContable",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/locations",
+   "tag": "Localidades",
+   "summary": "Mostrar localidades",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "depth",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "default": 1,
+     "description": "Profundidad"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño de la página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Nro de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/Location::Minimal"
+    },
+    "definitions": [
+     "Location::Minimal"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/locations/{id}",
+   "tag": "Localidades",
+   "summary": "Mostrar localidad",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la localidad\n"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/Location"
+    },
+    "definitions": [
+     "Location"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/organization/areas/",
+   "tag": "Áreas",
+   "summary": "Listar áreas",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "active",
+      "inactive",
+      "both"
+     ],
+     "default": "both",
+     "description": "(OPCIONAL) Filtra los resultados por el estado del área."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Area_new"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Area_new",
+     "Pagination",
+     "parent_child_area"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/organization/areas/{id}",
+   "tag": "Áreas",
+   "summary": "Obtener un área en especifico por ID",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del área a consultar"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "description": "Como respuesta recibimos todos los campos correspondiente a la información del área consultada dentro",
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Area_new"
+      }
+     }
+    },
+    "definitions": [
+     "Area_new",
+     "parent_child_area"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/payroll_detail/month",
+   "tag": "Boletas de Pago",
+   "summary": "Listar Boletas de Pago",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "La fecha en la que deben extraer las Boletas de Pago de lo Colaboradores (Formato DD-MM-YYYY)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Settlement"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Settlement",
+     "SettlementLine"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/payroll_detail/semi_month",
+   "tag": "Boletas de Pago",
+   "summary": "Listar Boletas de Pago",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "La fecha en la que deben extraer las Boletas de Pago de lo Colaboradores (Formato DD-MM-YYYY)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Settlement"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Settlement",
+     "SettlementLine"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/payroll_detail/week",
+   "tag": "Boletas de Pago",
+   "summary": "Listar Boletas de Pago",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura' o 'Lectura y Modificación'. * Permitir ver información sensible en: 'Sí'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "La fecha en la que deben extraer las Boletas de Pago de lo Colaboradores (Formato DD-MM-YYYY)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Settlement"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Settlement",
+     "SettlementLine"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/people/{id}",
+   "tag": "Personas",
+   "summary": "Obtener datos básicos de una persona",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de personas en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la persona"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/PersonResponse"
+      }
+     }
+    },
+    "definitions": [
+     "PersonResponse"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/permission_roles",
+   "tag": "Usuarios y perfiles",
+   "summary": "Mostrar Perfiles",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de usuarios y perfiles en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID del perfil"
+    },
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Nombre"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/PermissionRole"
+    },
+    "definitions": [
+     "PermissionRole"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/piecework/executions",
+   "tag": "Tarifas",
+   "summary": "Listar Tarifas",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tratos en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "created_at",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha en que fue creada la tarifa en YYYY-MM-DD."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/piecework/places",
+   "tag": "Lugares de Trabajo",
+   "summary": "Listar Lugares de Trabajo",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "empresa_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": {}
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/piecework/products",
+   "tag": "Productos",
+   "summary": "Listar Productos",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tratos en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/piecework/tasks",
+   "tag": "Labores",
+   "summary": "Listar labores",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tratos en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "created_at",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha en que fue creada la labor en YYYY-MM-DD."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/piecework/units",
+   "tag": "Unidades",
+   "summary": "Listar Unidades",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tratos en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/piecework/worklogs",
+   "tag": "Registros de Trabajo",
+   "summary": "Listar Registros de Trabajo",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de tratos en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(Opcional) ID del empleado asociado al Registro de Trabajo"
+    },
+    {
+     "name": "variable_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(Opcional) ID del periodo asociado al Registro de Trabajo"
+    },
+    {
+     "name": "empresa_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": {}
+    },
+    {
+     "name": "area_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(Opcional) ID del área a la que pertenece el empleado asociado al Registro de Trabajo"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(Opcional) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]\n"
+    }
+   ],
+   "response200": null,
+   "responseCodes": []
+  },
+  {
+   "path": "/process",
+   "tag": "Procesos",
+   "summary": "Listar procesos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": true,
+     "type": "string",
+     "format": "date",
+     "description": "Indica la fecha de inicio del proceso a consultar (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Numero de página"
+    },
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Nombre del proceso para filtrar los resultados"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Process"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Process"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/process_periods",
+   "tag": "Períodos",
+   "summary": "Listar períodos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Variable"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Variable"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/process/{id}",
+   "tag": "Procesos",
+   "summary": "Obtener detalles de un proceso",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de procesos en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ÍD del proceso a consultar"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/Process"
+    },
+    "definitions": [
+     "Process"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/recintos",
+   "tag": "Recintos",
+   "summary": "Mostrar Recintos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "code",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "- code: Código del Recinto (OPCIONAL)"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/RecintoIndex"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "RecintoIndex"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/recruiting/applicants/",
+   "tag": "Postulante",
+   "summary": "Listar postulantes",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de selección en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "selection_processes[]",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "description": "(OPCIONAL) Ids de los procesos de selección a consultar. (Devuelve los postulantes si estan al menos en un proceso de selección)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "applicants": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Applicant"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Applicant",
+     "ApplicantBase",
+     "ApplicantCv",
+     "ApplicantIdentifier",
+     "ApplicantLocation",
+     "ApplicantSelectionProcess",
+     "BasePersonIdentifier",
+     "Pagination",
+     "StudiesLevel"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/recruiting/applicants/{id}",
+   "tag": "Postulante",
+   "summary": "Mostrar postulante",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de selección en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o Número de Documento del postulante por el cual se está consultando."
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "applicant": {
+       "$ref": "#/definitions/Applicant"
+      }
+     }
+    },
+    "definitions": [
+     "Applicant",
+     "ApplicantBase",
+     "ApplicantCv",
+     "ApplicantIdentifier",
+     "ApplicantLocation",
+     "ApplicantSelectionProcess",
+     "BasePersonIdentifier",
+     "StudiesLevel"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/recruiting/applicants/{id}/applications",
+   "tag": "Postulante",
+   "summary": "Listar postulaciones por postulante",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de selección en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID o RUT del postulante por el cual se está consultando. El RUT solo es permitido sin puntos, puede ser con o sin el caracter de guión."
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "applications": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/ApplicationForApplicant"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "ApplicationApplicant",
+     "ApplicationApplicantIdentifier",
+     "ApplicationBase",
+     "ApplicationForApplicant",
+     "ApplicationProcessStage",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/recruiting/applications",
+   "tag": "Postulación",
+   "summary": "Listar postulaciones",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de selección en: 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "selection_processes[]",
+     "in": "query",
+     "required": false,
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "description": "(OPCIONAL) Ids de los procesos de selección a consultar. (Devuelve las postulaciones si estan al menos en un proceso de selección)"
+    },
+    {
+     "name": "application_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Indica la fecha de postulación a consultar (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "updated_from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Indica la fecha inicial de actualización a consultar (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "updated_to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Indica la fecha final de actualización a consultar (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Nro de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Application"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Application",
+     "ApplicationApplicant",
+     "ApplicationApplicantIdentifier",
+     "ApplicationBase",
+     "ApplicationProcessStage",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/recruiting/selection_processes",
+   "tag": "Proceso de selección",
+   "summary": "Listar procesos de selección ",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de selección en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    },
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Búsqueda de procesos de selección a partir de esta fecha. Si no se especifica, se usan los procesos de selección desde el inicio. Formato YYYY-MM-DD"
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Búsqueda de procesos de selección hasta esta fecha. Si no se especifica, se usan los procesos de selección hasta la fecha actual. Formato YYYY-MM-DD"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/SelectionProcess"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Article22",
+     "CamposBrasil",
+     "Pagination",
+     "SelectionProcess",
+     "SelectionProcessArea",
+     "SelectionProcessBase",
+     "SelectionProcessCompany",
+     "SelectionProcessLocation",
+     "SelectionProcessRecruiter",
+     "SelectionProcessRole",
+     "SelectionProcessStage",
+     "SelectionProcessSupervisor"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/role_families",
+   "tag": "Cargos",
+   "summary": "Listar familia de cargos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "search",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra las familias de cargos por nombre"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/RoleFamily"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/roles",
+   "tag": "Cargos",
+   "summary": "Listar cargos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "search",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los cargos por nombre"
+    },
+    {
+     "name": "code",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Filtra los cargos por código"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Role"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Role",
+     "RoleFamily"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/roles/{id}",
+   "tag": "Cargos",
+   "summary": "Obtener un cargo en específico por ID",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del cargo"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "description": "Como respuesta recibirás los atributos correspondientes al cargo consultado",
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Role::Response"
+      }
+     }
+    },
+    "definitions": [
+     "Role::Response"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "404"
+   ]
+  },
+  {
+   "path": "/substitutions",
+   "tag": "Suplencias",
+   "summary": "",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de empleados en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Parámetros de consulta opcionales para filtrar y paginar las suplencias\n"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Parámetros de consulta opcionales para filtrar y paginar las suplencias\n"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/EmployeeSubstitutionDetail"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "EmployeeSubstitutionDetail",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/talent/evaluation_process/{id}/results/capacities",
+   "tag": "Evaluaciones",
+   "summary": "Mostrar resultados de Competencias de una evaluación de desempeño",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de evaluaciones en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la evaluación de desempeño a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "evaluations": {
+       "$ref": "#/definitions/Capacities"
+      }
+     },
+     "description": "Como respuesta recibimos todos los campos correspondiente a la información de la evaluación de desempeño consultada."
+    },
+    "definitions": [
+     "Capacities",
+     "EvaluatedPersonIdentifier",
+     "EvaluatorPersonIdentifier",
+     "Pagination",
+     "ScoreByCapacity"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/talent/evaluation_process/{id}/results/goals",
+   "tag": "Evaluaciones",
+   "summary": "Mostrar resultados de Metas de una evaluación de desempeño",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de evaluaciones en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID de la evaluación de desempeño a consultar"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "evaluations": {
+       "$ref": "#/definitions/Goals"
+      }
+     },
+     "description": "Como respuesta recibimos todos los campos correspondiente a la información de la evaluación de desempeño consultada."
+    },
+    "definitions": [
+     "EvaluatedPersonIdentifier",
+     "EvaluatorPersonIdentifier",
+     "Goals",
+     "Pagination",
+     "ScoreByGoal"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/talent/evaluation_processes",
+   "tag": "Evaluaciones",
+   "summary": "Mostrar evaluaciones de desempeño",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de evaluaciones en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "evaluation_processes": {
+       "$ref": "#/definitions/EvaluationProcess"
+      }
+     },
+     "description": "Como respuesta recibimos todos los datos correspondientes a las evaluaciones de desempeño disponibles."
+    },
+    "definitions": [
+     "EvaluationProcess",
+     "Pagination"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/training/sence_percents",
+   "tag": "Capacitaciones",
+   "summary": "Mostrar tramo sence de todos los empleados",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de capacitaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/SencePercentIndex"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "Employee::Response::Simple",
+     "Pagination",
+     "SencePercentIndex"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/training/sence_percents/{employee_id}",
+   "tag": "Capacitaciones",
+   "summary": "Mostrar el tramo sence de un empleados",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de capacitaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "employee_id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": " ID o RUT sin puntos del empleados a consultar"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/SencePercent"
+    },
+    "definitions": [
+     "SencePercent"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/unions",
+   "tag": "Sindicatos",
+   "summary": "Mostrar sindicatos",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/union"
+    },
+    "definitions": [
+     "union"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/unions/{id}",
+   "tag": "Sindicatos",
+   "summary": "Mostrar sindicato",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "integer",
+     "description": "ID del sindicato"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/union"
+    },
+    "definitions": [
+     "union"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/users",
+   "tag": "Usuarios y perfiles",
+   "summary": "Mostrar usuarios",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de usuarios y perfiles en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "name",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Nombre"
+    },
+    {
+     "name": "email",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "Email"
+    },
+    {
+     "name": "person_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID de la Persona (Se encuentra en el endpoint de empleados)"
+    },
+    {
+     "name": "permission_role_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID del perfil"
+    },
+    {
+     "name": "limit_areas",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "enum": [
+      true,
+      false
+     ],
+     "description": "¿Limitado por áreas?"
+    },
+    {
+     "name": "limit_realms",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "enum": [
+      true,
+      false
+     ],
+     "description": "¿Limitado por Juego de datos?"
+    },
+    {
+     "name": "realm_name",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "enum": [
+      true,
+      false
+     ],
+     "description": "Nombre del juego de datos"
+    },
+    {
+     "name": "limited_by_area_id",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "ID del Área por el cual esta limitados los usuarios"
+    },
+    {
+     "name": "activated",
+     "in": "query",
+     "required": false,
+     "type": "boolean",
+     "enum": [
+      true,
+      false
+     ],
+     "description": "¿Usuario activo?"
+    },
+    {
+     "name": "rol_visible",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "ve_publico",
+      "ve_privado",
+      "ve_ambos"
+     ],
+     "description": "Límites de Rol"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/User"
+    },
+    "definitions": [
+     "User"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/users/{id}",
+   "tag": "Usuarios y perfiles",
+   "summary": "Mostrar usuario",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de usuarios y perfiles en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID de usuario"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/User"
+    },
+    "definitions": [
+     "User"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/vacation_definitions",
+   "tag": "Políticas de vacaciones",
+   "summary": "Listar Políticas de Vacaciones",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Nro de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/VacationDefinitionOutput"
+    },
+    "definitions": [
+     "VacationDefinition",
+     "VacationDefinitionOutput",
+     "VacationType"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/vacations",
+   "tag": "Vacaciones",
+   "summary": "Listar vacaciones",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) La fecha en la cual deben iniciar las vacaciones en YYYY-MM-DD"
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Busca las vacaciones que empezaron antes de una fecha en YYYY-MM-DD"
+    },
+    {
+     "name": "end_after",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Busca las vacaciones que terminaron despues de una fecha en YYYY-MM-DD"
+    },
+    {
+     "name": "start_before",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Busca las vacaciones que empezaron antes de una fecha en YYYY-MM-DD"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Vacation"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Vacation"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/vacations/{id}",
+   "tag": "Vacaciones",
+   "summary": "Mostrar una vacación",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "type": "string",
+     "description": "ID de la vacación a consultar"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "data": {
+       "$ref": "#/definitions/Vacation"
+      }
+     }
+    },
+    "definitions": [
+     "Vacation"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/vacations/business_days",
+   "tag": "Vacaciones",
+   "summary": "Mostrar cantidad de días hábiles",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "start_date",
+     "in": "query",
+     "required": true,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de inicio (inclusive, formato YYYY-MM-DD)"
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": true,
+     "type": "string",
+     "format": "date",
+     "description": "Fecha de término (inclusive, formato YYYY-MM-DD)"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "business_days": {
+       "type": "number",
+       "description": "Como respuesta recibimos la cantidad de días hábiles en el rango de fecha dado",
+       "example": 5
+      }
+     }
+    },
+    "definitions": []
+   },
+   "responseCodes": [
+    "200",
+    "400"
+   ]
+  },
+  {
+   "path": "/vacations/requested",
+   "tag": "Vacaciones",
+   "summary": "Listar Vacaciones",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de vacaciones en: 'Lectura' o 'Lectura y Modificación'.",
+   "parameters": [
+    {
+     "name": "date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) La fecha en la cual deben iniciar las vacaciones en YYYY-MM-DD"
+    },
+    {
+     "name": "end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) La fecha tope del periodo de consulta de las vacaciones en YYYY-MM-DD"
+    },
+    {
+     "name": "end_after",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Busca las vacaciones que terminaron después de una fecha en YYYY-MM-DD"
+    },
+    {
+     "name": "start_before",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Busca las vacaciones que empezaron antes de una fecha en YYYY-MM-DD"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "enum": [
+      "submitted",
+      "approved",
+      "rejected",
+      "pre_approved",
+      "signature_required"
+     ],
+     "description": "(OPCIONAL) Busca las vacaciones que tienen como status algunos de los valores permitidos (submitted, approved, rejected, pre_approved, signature_required)"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/Vacation"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "Pagination",
+     "Vacation"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/versions",
+   "tag": "Versiones",
+   "summary": "Mostrar versiones",
+   "deprecated": false,
+   "permissions": null,
+   "parameters": [
+    {
+     "name": "event",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Evento que da origen a la versión"
+    },
+    {
+     "name": "item_type",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Clase del objeto afectado que da origen a la versión"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Tamaño página"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "$ref": "#/definitions/version"
+    },
+    "definitions": [
+     "version"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  },
+  {
+   "path": "/workflow/alta/processes",
+   "tag": "Flujos de Trabajo",
+   "summary": "Obtener flujos de alta",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de Workflow en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "status",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "enum": [
+      1,
+      2,
+      4,
+      5
+     ],
+     "description": "(OPCIONAL) Estado de la solicitud. En Progreso(1), Finalizado(2), Error(4), Cancelado(5)"
+    },
+    {
+     "name": "creation_start_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha Creación de la solicitud (Desde), en formato YYYY-MM-DD"
+    },
+    {
+     "name": "creation_end_date",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Fecha Creación de la solicitud (Hasta), en formato YYYY-MM-DD"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Número de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "title": "ResponseBody",
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/WorkflowProcessAlta"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "Pagination",
+     "WorkflowCompanyIdentifier",
+     "WorkflowProcessAlta",
+     "WorkflowProcessAltaEmployee",
+     "WorkflowProcessAltaJob",
+     "WorkflowProcessAltaJobArea",
+     "WorkflowProcessAltaJobCompany",
+     "WorkflowProcessAltaJobRole",
+     "WorkflowProcessAltaJobSupervisor",
+     "WorkflowProcessAltaOperation",
+     "WorkflowProcessAltaUser",
+     "WorkflowProcessBase",
+     "WorkflowProcessBaseEmployee"
+    ]
+   },
+   "responseCodes": [
+    "200",
+    "400",
+    "404"
+   ]
+  },
+  {
+   "path": "/working_days",
+   "tag": "Días trabajados",
+   "summary": "Mostrar días trabajados",
+   "deprecated": false,
+   "permissions": "**Permisos requeridos para utilizar este endpoint:** * Permisos de asistencia en: 'Lectura'.",
+   "parameters": [
+    {
+     "name": "from",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Indica la fecha inicial de días trabajados (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "to",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "format": "date",
+     "description": "(OPCIONAL) Indica la fecha final de días trabajados (Formato YYYY-MM-DD)"
+    },
+    {
+     "name": "document_number",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Número de Documento del Colaborador"
+    },
+    {
+     "name": "code",
+     "in": "query",
+     "required": false,
+     "type": "string",
+     "description": "(OPCIONAL) Código de la ficha del Colaborador"
+    },
+    {
+     "name": "page_size",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Numero de respuestas por página. Por defecto tiene un valor de 25 y debe estar entre un rango de [25 - 100]"
+    },
+    {
+     "name": "page",
+     "in": "query",
+     "required": false,
+     "type": "integer",
+     "description": "(OPCIONAL) Nro de página"
+    }
+   ],
+   "response200": {
+    "schema": {
+     "properties": {
+      "pagination": {
+       "$ref": "#/definitions/Pagination"
+      },
+      "data": {
+       "type": "array",
+       "items": {
+        "$ref": "#/definitions/WorkingDay"
+       }
+      }
+     }
+    },
+    "definitions": [
+     "BasePersonIdentifier",
+     "Pagination",
+     "WorkingDay"
+    ]
+   },
+   "responseCodes": [
+    "200"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,257 @@
+{
+ "domains_version": 1,
+ "note": "Proposed grouping derived from Swagger tags and path prefixes; sensitive tools are gated separately.",
+ "domains": {
+  "buk_absences": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/absences",
+    "/absences/absence",
+    "/absences/absence/{id}",
+    "/absences/absence/types",
+    "/absences/absence/types/{id}",
+    "/absences/licence",
+    "/absences/licence/{id}",
+    "/absences/licence/types",
+    "/absences/licence/types/{id}",
+    "/absences/permission",
+    "/absences/permission/{id}",
+    "/absences/permission/types",
+    "/absences/permission/types/{id}",
+    "/employees/absences/absences",
+    "/employees/absences/licences",
+    "/employees/absences/permissions"
+   ]
+  },
+  "buk_accounting": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/accounting",
+    "/accounting_structure/assignments",
+    "/accounting_structure/export",
+    "/accounting_structure/export_process_differences",
+    "/accounting_structure/structures",
+    "/accounting/export",
+    "/accounting/export_detail",
+    "/accounting/export_period",
+    "/accounting/export_process_differences",
+    "/accounting/vacations/balance",
+    "/ledger_account"
+   ]
+  },
+  "buk_organization": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/areas",
+    "/areas/{id}",
+    "/centro_costo_definitions",
+    "/centro_costo_definitions/{id}",
+    "/companies",
+    "/groups",
+    "/groups/{id}",
+    "/locations",
+    "/locations/{id}",
+    "/organization/areas/",
+    "/organization/areas/{id}",
+    "/recintos"
+   ]
+  },
+  "buk_attendance": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/attendances/non-worked-hours",
+    "/attendances/non-worked-hours/{id}",
+    "/attendances/non-worked-hours/types",
+    "/attendances/overtime",
+    "/attendances/overtime/{id}",
+    "/attendances/overtime/types",
+    "/employees/overtimes",
+    "/working_days"
+   ]
+  },
+  "buk_benefits": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/benefits/benefit_requests",
+    "/benefits/benefit_requests/{id}",
+    "/benefits/benefit_versions/{id}"
+   ]
+  },
+  "buk_company_data": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/company_variable_registries/{id}",
+    "/company_variables/{empresa_id}",
+    "/kpi_data",
+    "/kpis",
+    "/versions",
+    "/workflow/alta/processes"
+   ]
+  },
+  "buk_compensation": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/credits",
+    "/credits/{id}",
+    "/employees/{id}/assigns",
+    "/employees/{id}/pension_savings",
+    "/items"
+   ]
+  },
+  "buk_documents": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/docs/{id}",
+    "/employees/{id}/docs",
+    "/employees/{id}/docs/{file_id}"
+   ]
+  },
+  "buk_employees_search": {
+   "sensitive": false,
+   "phase_one": true,
+   "operations": [
+    "/employees"
+   ]
+  },
+  "buk_employee_sections": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/employees/{employee_id}/family_responsibilities/{id}",
+    "/employees/{employee_id}/plans/{id}",
+    "/employees/{id}/plans",
+    "/employees/{id}/subordinates",
+    "/people/{id}",
+    "/substitutions"
+   ]
+  },
+  "buk_payroll_detail": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/employees/{employee_id}/payroll_detail",
+    "/employees/{id}/statements/{year}-{month}.pdf",
+    "/payroll_detail/month",
+    "/payroll_detail/semi_month",
+    "/payroll_detail/week"
+   ]
+  },
+  "buk_employee_context": {
+   "sensitive": false,
+   "phase_one": true,
+   "operations": [
+    "/employees/{id}",
+    "/employees/{id}/jobs"
+   ]
+  },
+  "buk_vacations": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/employees/{id}/earned_vacations",
+    "/employees/{id}/vacation_definitions",
+    "/employees/{id}/vacations_available",
+    "/vacation_definitions",
+    "/vacations",
+    "/vacations/{id}",
+    "/vacations/business_days",
+    "/vacations/requested"
+   ]
+  },
+  "buk_workforce_summary": {
+   "sensitive": false,
+   "phase_one": true,
+   "operations": [
+    "/employees/active"
+   ]
+  },
+  "buk_org_catalogs": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/holidays",
+    "/role_families",
+    "/roles",
+    "/roles/{id}",
+    "/unions",
+    "/unions/{id}"
+   ]
+  },
+  "buk_job_termination": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/jobs/{id}/termination"
+   ]
+  },
+  "buk_job_events": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/jobs/events/hires",
+    "/jobs/events/movements",
+    "/jobs/events/terminations"
+   ]
+  },
+  "buk_users_permissions": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/permission_roles",
+    "/users",
+    "/users/{id}"
+   ]
+  },
+  "buk_piecework": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/piecework/executions",
+    "/piecework/places",
+    "/piecework/products",
+    "/piecework/tasks",
+    "/piecework/units",
+    "/piecework/worklogs"
+   ]
+  },
+  "buk_payroll_processes": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/process",
+    "/process_periods",
+    "/process/{id}"
+   ]
+  },
+  "buk_recruiting": {
+   "sensitive": true,
+   "phase_one": false,
+   "operations": [
+    "/recruiting/applicants/",
+    "/recruiting/applicants/{id}",
+    "/recruiting/applicants/{id}/applications",
+    "/recruiting/applications",
+    "/recruiting/selection_processes"
+   ]
+  },
+  "buk_talent_training": {
+   "sensitive": false,
+   "phase_one": false,
+   "operations": [
+    "/talent/evaluation_process/{id}/results/capacities",
+    "/talent/evaluation_process/{id}/results/goals",
+    "/talent/evaluation_processes",
+    "/training/sence_percents",
+    "/training/sence_percents/{employee_id}"
+   ]
+  }
+ }
+}
