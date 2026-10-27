@@ -72,7 +72,8 @@ const compact = operations.map((operation) => ({
   deprecated: operation.deprecated,
   summary: operation.summary.replace(/\s+/g, ' ').trim().slice(0, 120),
   hasResponseSchema: operation.response200 !== null,
-  paginated: JSON.stringify(operation.response200?.schema ?? null).includes('Pagination'),
+  // The Swagger response schema alone is unreliable (e.g. /users paginates without declaring it), so paging parameters count too.
+  paginated: JSON.stringify(operation.response200?.schema ?? null).includes('Pagination') || operation.parameters.some((p) => p.name === 'page' || p.name === 'page_size'),
   parameters: operation.parameters.map((p) => ({
     name: p.name, in: p.in, required: p.required, type: p.type,
     ...(p.format ? { format: p.format } : {}), ...(p.enum ? { enum: p.enum } : {}),

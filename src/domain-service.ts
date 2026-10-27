@@ -1,5 +1,5 @@
 import { BukHttpClient, type Query } from './client.js';
-import { buildDomainInputSchema, domainToolNames, resolveRequest, type DomainOutput } from './domain-tools.js';
+import { buildDomainInputSchema, domainToolNames, offersAllPages, resolveRequest, type DomainOutput } from './domain-tools.js';
 import { BukServiceError } from './errors.js';
 import { ensureSmall, isRecord, newMeta, parsePagination, ToolBudget, type Pagination } from './runtime.js';
 
@@ -79,7 +79,7 @@ export function createDomainService(options: DomainServiceOptions) {
     if (first.rows && next) {
       if (!request.allPages) {
         complete = false;
-        warnings.push(request.operation.paginated
+        warnings.push(offersAllPages(request.operation)
           ? 'BUK indica más páginas. Repite con all_pages: true para recorrerlas dentro del presupuesto.'
           : 'BUK indica más páginas, pero esta operación no admite recorrerlas.');
       } else {

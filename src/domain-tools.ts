@@ -70,6 +70,11 @@ function parameterSchema(parameter: ParameterSpec): z.ZodType {
   return describe(parameter.required ? schema : schema.optional(), parameter);
 }
 
+/** The Swagger under-documents paging (e.g. /users), so collection endpoints without path parameters offer all_pages too; runtime detects pagination.next. */
+export function offersAllPages(operation: OperationSpec): boolean {
+  return operation.paginated || !operation.parameters.some((parameter) => parameter.in === 'path');
+}
+
 function variantShape(operation: OperationSpec): Record<string, z.ZodType> {
   const shape: Record<string, z.ZodType> = {};
   const summary = `${operation.deprecated ? '[OBSOLETO] ' : ''}${operation.summary}`.trim();
@@ -80,7 +85,7 @@ function variantShape(operation: OperationSpec): Record<string, z.ZodType> {
     if (Object.hasOwn(shape, key)) throw new Error(`Parameter name collision in ${operation.path}: ${key}`);
     shape[key] = parameterSchema(parameter);
   }
-  if (operation.paginated) shape.all_pages = z.boolean().optional().describe('true: todas las páginas');
+  if (offersAllPages(operation)) shape.all_pages = z.boolean().optional().describe('true: todas las páginas');
   return shape;
 }
 

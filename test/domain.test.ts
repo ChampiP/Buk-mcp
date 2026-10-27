@@ -162,3 +162,12 @@ test('a single object that carries a paginated sub-list with more pages is never
   assert.equal(out.meta.complete, false);
   assert.match(out.warnings.join(' '), /sub-?lista|más páginas/i);
 });
+
+test('every operation that accepts page or page_size, or documents a paginated response, offers all_pages', () => {
+  for (const operation of OPERATIONS) {
+    const pageable = operation.parameters.some((parameter) => parameter.name === 'page' || parameter.name === 'page_size');
+    if (pageable) assert.equal(operation.paginated, true, `${operation.path} accepts paging but is not marked paginated`);
+  }
+  const schema = buildDomainInputSchema('buk_users_permissions');
+  assert.ok(schema.safeParse({ request: { operation: 'users', all_pages: true } }).success);
+});
