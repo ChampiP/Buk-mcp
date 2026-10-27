@@ -339,7 +339,7 @@ export function createBukService(options: BukServiceOptions) {
     const totalCount = countFrom(page.pagination);
     const hasNext = typeof page.pagination?.next === 'string';
     const hasPaginationEnd = page.pagination?.next === null;
-    let complete = hasPaginationEnd && totalCount !== null && totalCount === seenIds.size && !incompleteId && candidates.length === page.items.length && (page.pagination?.total_pages === undefined || page.pagination.total_pages === 1);
+    let complete = hasPaginationEnd && totalCount !== null && totalCount === seenIds.size && !incompleteId && candidates.length === page.items.length && (page.pagination?.total_pages === undefined || page.pagination.total_pages <= 1);
     if (hasNext) warnings.push('Hay más candidatos: la búsqueda devuelve una página por llamada; indica page para continuar.');
     else if (!hasPaginationEnd) warnings.push('BUK no confirmó el fin de la paginación; el total es parcial.');
     if (page.pagination?.total_pages !== undefined && page.pagination.total_pages > 1) warnings.push('BUK indicó páginas adicionales; la búsqueda devuelve una página por llamada.');
