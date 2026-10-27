@@ -408,7 +408,9 @@ export function createBukService(options: BukServiceOptions) {
     });
   }
 
-  return { workforceSummary, employeesSearch, employeeContext };
+  // Defense in depth: never return a credential an upstream body might echo.
+  const redacting = <Args extends unknown[], Result>(fn: (...args: Args) => Promise<Result>) => async (...args: Args): Promise<Result> => options.client.redact(await fn(...args));
+  return { workforceSummary: redacting(workforceSummary), employeesSearch: redacting(employeesSearch), employeeContext: redacting(employeeContext) };
 }
 
 export type BukService = ReturnType<typeof createBukService>;

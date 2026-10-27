@@ -95,7 +95,8 @@ export function appendQuery(url: URL, query: Query): void {
 
 export function parseQuery(route: Route, url: URL): Query {
   const specs = new Map(route.operation.parameters.filter((p) => p.in === 'query').map((p) => [p.name, p]));
-  const result: Record<string, QueryValue | number[]> = {};
+  // Null prototype: a hostile key such as __proto__ must stay an own property so validation sees it.
+  const result: Record<string, QueryValue | number[]> = Object.create(null);
   for (const [key, raw] of url.searchParams) {
     const spec = specs.get(key);
     if (spec && isMultiInteger(spec)) {

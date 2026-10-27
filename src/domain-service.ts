@@ -114,12 +114,12 @@ export function createDomainService(options: DomainServiceOptions) {
     if (!isList) {
       const output = build();
       if (Buffer.byteLength(JSON.stringify(output), 'utf8') > maxToolOutputBytes) throw new BukServiceError('BUK output exceeded the size limit; use narrower filters', 'BUK_OUTPUT_TOO_LARGE');
-      return output;
+      return options.client.redact(output);
     }
-    return ensureSmall(rows, build, maxToolOutputBytes, () => {
+    return options.client.redact(ensureSmall(rows, build, maxToolOutputBytes, () => {
       complete = false;
       warnings.push('Salida recortada por tamaño: se devolvieron menos registros de los obtenidos; usa filtros más estrechos.');
-    });
+    }));
   }
 
   return { query };

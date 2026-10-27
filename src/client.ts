@@ -146,6 +146,14 @@ export class BukHttpClient {
 
   private readonly authToken: string;
 
+  /** Defense in depth: if an upstream body ever echoes the credential, it must not reach a tool result. */
+  redact<T>(value: T): T {
+    if (this.authToken.length < 8) return value;
+    const text = JSON.stringify(value);
+    if (text === undefined || !text.includes(this.authToken)) return value;
+    return JSON.parse(text.split(this.authToken).join('[REDACTED]')) as T;
+  }
+
   async get(path: string, query: Query = {}, budget: RequestBudget = {}): Promise<unknown> {
     validateQuery(matchRoute(path), query);
     const url = new URL(`${API_BASE_URL}${path}`);
