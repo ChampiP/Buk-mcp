@@ -192,3 +192,21 @@ test('fields keeps only the requested top-level keys and shrinks the output', as
   await assert.rejects(service.query('buk_org_catalogs', { request: { operation: 'roles', fields: ['bad key!'] } }), /Invalid arguments/);
   await assert.rejects(service.query('buk_org_catalogs', { request: { operation: 'roles_by_id', id: '1', fields: ['id'] } }), /Invalid arguments/);
 });
+
+test('size truncation under all_pages keeps whole pages and reports where to resume', async () => {
+  const mk = (from: number) => Array.from({ length: 50 }, (_, i) => ({ id: from + i, name: 'x'.repeat(40) }));
+  const pages = [
+    { data: mk(0), pagination: { next: `${BASE}/roles?page_size=50&page=2`, count: 50 } },
+    { data: mk(50), pagination: { next: `${BASE}/roles?page_size=50&page=3`, count: 50 } },
+    { data: mk(100), pagination: { next: null, count: 50 } },
+  ];
+  const { service } = domainHarness(pages, { maxToolOutputBytes: 9000 });
+  const out = await service.query('buk_org_catalogs', { request: { operation: 'roles', page_size: 50, all_pages: true } });
+  assert.equal(out.meta.complete, false);
+  assert.equal(out.meta.returned_count % 50, 0);
+  assert.ok(out.meta.returned_count > 0 && out.meta.returned_count < 150);
+  const resume = (out.meta as { resume?: { page: number; page_size: number } }).resume;
+  assert.deepEqual(resume, { page: 1 + out.meta.returned_count / 50, page_size: 50 });
+  assert.match(out.warnings.join(' '), /page/);
+  assert.ok(Buffer.byteLength(JSON.stringify(out)) <= 9000);
+});

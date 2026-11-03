@@ -107,6 +107,8 @@ export function createDomainService(options: DomainServiceOptions) {
           rows.push(...page.rows);
           pagination = page.pagination;
           next = page.pagination?.next ?? null;
+          // Once the rows alone exceed the output cap, more pages would only be discarded.
+          if (next && request.fields === undefined && Buffer.byteLength(JSON.stringify(rows), 'utf8') > maxToolOutputBytes) { complete = false; break; }
         }
         calls = budget.calls;
       }
@@ -128,10 +130,11 @@ export function createDomainService(options: DomainServiceOptions) {
     }
     const totalCount = complete && isList && request.allPages ? rows.length : pagination?.count ?? null;
     const semantics = complete && isList && request.allPages ? COUNT_SEMANTICS_TRAVERSED : COUNT_SEMANTICS_PROVIDER;
+    let resume: { page: number; page_size: number } | undefined;
     const build = (): DomainOutput => ({
       operation: request.name,
       data: isList ? rows : first.single,
-      meta: newMeta(now, complete, isList ? rows.length : 1, totalCount, calls, semantics),
+      meta: { ...newMeta(now, complete, isList ? rows.length : 1, totalCount, calls, semantics), ...(resume ? { resume } : {}) },
       warnings,
     });
     if (!isList) {
@@ -139,10 +142,20 @@ export function createDomainService(options: DomainServiceOptions) {
       if (Buffer.byteLength(JSON.stringify(output), 'utf8') > maxToolOutputBytes) throw new BukServiceError('BUK output exceeded the size limit; use narrower filters', 'BUK_OUTPUT_TOO_LARGE');
       return options.client.redact(output);
     }
-    return options.client.redact(ensureSmall(rows, build, maxToolOutputBytes, () => {
+    const fetched = rows.length;
+    const result = ensureSmall(rows, build, maxToolOutputBytes, () => {
       complete = false;
-      warnings.push('Salida recortada por tamaño: se devolvieron menos registros de los obtenidos; usa filtros más estrechos.');
-    }));
+      warnings.push('Salida recortada por tamaño: se devolvieron menos registros de los obtenidos; usa filtros más estrechos o fields.');
+    });
+    const pageSize = first.rows?.length ?? 0;
+    if (rows.length < fetched && request.allPages && pageSize > 0 && rows.length >= pageSize) {
+      // Keep whole pages only, so the caller can resume at an exact page boundary.
+      rows.length -= rows.length % pageSize;
+      resume = { page: Number(request.query.page ?? 1) + rows.length / pageSize, page_size: pageSize };
+      warnings.push(`Para continuar repite la consulta con page: ${resume.page} y page_size: ${resume.page_size}.`);
+      return options.client.redact(build());
+    }
+    return options.client.redact(result);
   }
 
   return { query };
