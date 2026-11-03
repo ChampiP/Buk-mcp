@@ -22,11 +22,12 @@ export interface BukHttpClientOptions {
 
 const continuationKeys = new Set(['page', 'page_size']);
 
-// BUK emits pagination links for these listings under /employees/absences/*.
+// BUK emits pagination links for these listings under a different path (or without the trailing slash).
 const NEXT_PATH_ALIASES: Record<string, string> = {
   '/absences/absence': '/employees/absences/absences',
   '/absences/licence': '/employees/absences/licences',
   '/absences/permission': '/employees/absences/permissions',
+  '/organization/areas/': '/organization/areas',
 };
 
 function fail(message: string, code: string): never {

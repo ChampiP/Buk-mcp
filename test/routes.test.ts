@@ -84,5 +84,6 @@ test('pagination links on generic routes must keep origin, path and filters', as
   for (const [path, alias] of [['/absences/absence', 'absences'], ['/absences/licence', 'licences'], ['/absences/permission', 'permissions']] as const) {
     client.validateNextPage(`${BASE}/employees/absences/${alias}?from=2026-10-01&page=2&page_size=25&to=2026-10-31`, path, { from: '2026-10-01', to: '2026-10-31', page_size: 25 });
   }
+  client.validateNextPage(`${BASE}/organization/areas?page=2&page_size=25`, '/organization/areas/', { page_size: 25 });
   assert.throws(() => client.validateNextPage(`${BASE}/employees/absences/absences?page=2`, '/absences/licence', {}), /pagination link/);
 });
