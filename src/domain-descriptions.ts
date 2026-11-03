@@ -1,5 +1,5 @@
 // Tool-level guidance written for the agent. Operation summaries come from the BUK Swagger.
-const SUFFIX = ' Solo lectura (GET). Una operación por llamada; all_pages solo si se necesita el listado completo.';
+const SUFFIX = ' Solo lectura (GET). Una operación por llamada; all_pages solo si se necesita el listado completo; entonces usa page_size: 100 y fields con las claves necesarias. Si meta.resume aparece, repite con esa page y page_size hasta complete: true.';
 
 export const DOMAIN_DESCRIPTIONS: Readonly<Record<string, string>> = {
   buk_employee_sections: 'Secciones de un colaborador: subordinados, planes, responsabilidades familiares, datos de persona y suplencias. Datos sensibles (personales y familiares): consulta solo lo necesario.',
@@ -8,7 +8,7 @@ export const DOMAIN_DESCRIPTIONS: Readonly<Record<string, string>> = {
   buk_organization: 'Estructura organizacional: áreas, grupos, empresas, centros de costo, localidades y recintos.',
   buk_org_catalogs: 'Catálogos: cargos, familias de cargo, sindicatos y feriados.',
   buk_vacations: 'Vacaciones: periodos, solicitudes, días hábiles, saldo disponible, devengadas y políticas.',
-  buk_absences: 'Ausencias, inasistencias, licencias y permisos, con sus tipos y consultas por colaboradores.',
+  buk_absences: 'Ausencias, inasistencias, licencias (incluye descansos médicos) y permisos, con sus tipos y consultas por colaboradores. Para un periodo usa absences_licence, absences_absence o absences_permission con from y to.',
   buk_attendance: 'Horas extras, horas no trabajadas, sus tipos y días trabajados.',
   buk_payroll_processes: 'Procesos de nómina y sus períodos.',
   buk_payroll_detail: 'Detalle de nómina y boletas por periodo y por colaborador. Datos sensibles (remuneraciones).',
