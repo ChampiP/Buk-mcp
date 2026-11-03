@@ -22,6 +22,13 @@ export interface BukHttpClientOptions {
 
 const continuationKeys = new Set(['page', 'page_size']);
 
+// BUK emits pagination links for these listings under /employees/absences/*.
+const NEXT_PATH_ALIASES: Record<string, string> = {
+  '/absences/absence': '/employees/absences/absences',
+  '/absences/licence': '/employees/absences/licences',
+  '/absences/permission': '/employees/absences/permissions',
+};
+
 function fail(message: string, code: string): never {
   throw new BukServiceError(message, code);
 }
@@ -36,7 +43,7 @@ function validateNextUrl(next: string, path: string, originalQuery: Query): URL 
   } catch {
     return fail('BUK pagination link is not allowed', 'BUK_PAGINATION_DENIED');
   }
-  if (url.protocol !== 'https:' || url.origin !== 'https://medsculp.buk.pe' || url.username || url.password || url.hash || url.pathname !== `${new URL(API_BASE_URL).pathname}${path}`) {
+  if (url.protocol !== 'https:' || url.origin !== 'https://medsculp.buk.pe' || url.username || url.password || url.hash || ![path, NEXT_PATH_ALIASES[path]].some((p) => p !== undefined && url.pathname === `${new URL(API_BASE_URL).pathname}${p}`)) {
     return fail('BUK pagination link is not allowed', 'BUK_PAGINATION_DENIED');
   }
   const route = matchRoute(path);
