@@ -86,7 +86,13 @@ function variantShape(operation: OperationSpec): Record<string, z.ZodType> {
     if (Object.hasOwn(shape, key)) throw new Error(`Parameter name collision in ${operation.path}: ${key}`);
     shape[key] = parameterSchema(parameter, parameter.in === 'path' || requiredNames.has(parameter.name));
   }
-  if (offersAllPages(operation)) shape.all_pages = z.boolean().optional().describe('true: todas las páginas');
+  if (offersAllPages(operation)) {
+    shape.all_pages = z.boolean().optional().describe('true: todas las páginas');
+    // BUK paginates collections the Swagger does not document; page_size is capped at 100 by BUK.
+    if (!shape.page) shape.page = z.number().int().min(1).max(500).optional().describe('(OPCIONAL) Página a consultar');
+    if (!shape.page_size) shape.page_size = z.number().int().min(1).max(100).optional().describe('(OPCIONAL) Registros por página (máx. 100); 100 reduce las llamadas a BUK');
+    shape.fields = z.array(z.string().regex(/^[A-Za-z0-9_]{1,64}$/)).min(1).max(40).optional().describe('(OPCIONAL) Devuelve solo estas claves de cada registro; reduce el tamaño de la salida');
+  }
   return shape;
 }
 
@@ -119,6 +125,7 @@ export interface ResolvedRequest {
   path: string;
   query: Query;
   allPages: boolean;
+  fields?: string[] | undefined;
 }
 
 export function resolveRequest(tool: string, request: Record<string, unknown>): ResolvedRequest {
@@ -132,5 +139,8 @@ export function resolveRequest(tool: string, request: Record<string, unknown>): 
     if (parameter.in === 'path') path = path.replace(`{${parameter.name}}`, String(value));
     else query[parameter.name] = value as Query[string];
   }
-  return { operation, name: operationName(operation.path), path, query, allPages: request.all_pages === true };
+  if (offersAllPages(operation)) {
+    for (const key of ['page', 'page_size'] as const) if (request[key] !== undefined) query[key] = request[key] as number;
+  }
+  return { operation, name: operationName(operation.path), path, query, allPages: request.all_pages === true, fields: request.fields as string[] | undefined };
 }

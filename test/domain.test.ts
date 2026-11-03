@@ -171,3 +171,24 @@ test('every operation that accepts page or page_size, or documents a paginated r
   const schema = buildDomainInputSchema('buk_users_permissions');
   assert.ok(schema.safeParse({ request: { operation: 'users', all_pages: true } }).success);
 });
+
+test('collections the Swagger leaves undocumented still accept page and page_size', async () => {
+  const { service, urls } = domainHarness([{ data: [{ id: 1 }], pagination: { next: null, count: 1 } }]);
+  await service.query('buk_attendance', { request: { operation: 'employees_overtimes', page: 2, page_size: 100 } });
+  assert.equal(urls[0]?.searchParams.get('page'), '2');
+  assert.equal(urls[0]?.searchParams.get('page_size'), '100');
+  const bad = domainHarness([{ data: [] }]);
+  await assert.rejects(bad.service.query('buk_attendance', { request: { operation: 'working_days', page_size: 101 } }), /Invalid arguments|not allowed/);
+});
+
+test('fields keeps only the requested top-level keys and shrinks the output', async () => {
+  const rows = [{ id: 1, name: 'A', secret: 'x' }, { id: 2, name: 'B', secret: 'y' }];
+  const { service, urls } = domainHarness([{ data: rows, pagination: { next: null, count: 2 } }]);
+  const out = await service.query('buk_org_catalogs', { request: { operation: 'roles', fields: ['id', 'name'] } });
+  assert.deepEqual(out.data, [{ id: 1, name: 'A' }, { id: 2, name: 'B' }]);
+  assert.equal(urls[0]?.searchParams.has('fields'), false);
+  const miss = await domainHarness([{ data: rows, pagination: { next: null, count: 2 } }]).service.query('buk_org_catalogs', { request: { operation: 'roles', fields: ['id', 'nope'] } });
+  assert.match(miss.warnings.join(' '), /nope/);
+  await assert.rejects(service.query('buk_org_catalogs', { request: { operation: 'roles', fields: ['bad key!'] } }), /Invalid arguments/);
+  await assert.rejects(service.query('buk_org_catalogs', { request: { operation: 'roles_by_id', id: '1', fields: ['id'] } }), /Invalid arguments/);
+});

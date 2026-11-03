@@ -107,7 +107,7 @@ export function validateQuery(route: Route, query: Query, continuation = false):
   const override = PHASE_ONE[route.operation.path];
   const specs = new Map(route.operation.parameters.filter((p) => p.in === 'query').map((p) => [p.name, p]));
   for (const [key, value] of Object.entries(query)) {
-    const spec = specs.get(key) ?? (continuation && continuationKeys.has(key) ? { name: key, in: 'query' as const, required: false, type: 'integer' as const } : undefined);
+    const spec = specs.get(key) ?? ((continuation || !route.operation.parameters.some((p) => p.in === 'path')) && continuationKeys.has(key) ? { name: key, in: 'query' as const, required: false, type: 'integer' as const } : undefined);
     if (!spec || !valueAllowed(spec, key, value, override?.enums?.[key])) deny('BUK query is not allowed', 'BUK_QUERY_DENIED');
   }
   for (const key of requiredQueryNames(route.operation)) if (query[key] === undefined) deny('BUK request is missing a required query parameter', 'BUK_QUERY_DENIED');

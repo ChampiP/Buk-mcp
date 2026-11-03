@@ -117,6 +117,15 @@ export function createDomainService(options: DomainServiceOptions) {
       warnings.push('El objeto incluye una sublista con más páginas que esta operación no recorre; el resultado es parcial.');
     }
     const isList = first.rows !== null;
+    if (isList && request.fields) {
+      const keep = request.fields;
+      for (let i = 0; i < rows.length; i += 1) {
+        const row = rows[i];
+        if (isRecord(row)) rows[i] = Object.fromEntries(keep.filter((key) => Object.hasOwn(row, key)).map((key) => [key, row[key]]));
+      }
+      const absent = keep.filter((key) => !rows.some((row) => isRecord(row) && Object.hasOwn(row, key)));
+      if (rows.length > 0 && absent.length > 0) warnings.push(`Ningún registro trae las claves pedidas en fields: ${absent.join(', ')}.`);
+    }
     const totalCount = complete && isList && request.allPages ? rows.length : pagination?.count ?? null;
     const semantics = complete && isList && request.allPages ? COUNT_SEMANTICS_TRAVERSED : COUNT_SEMANTICS_PROVIDER;
     const build = (): DomainOutput => ({
